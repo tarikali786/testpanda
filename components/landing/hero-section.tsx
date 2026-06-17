@@ -13,7 +13,7 @@ const stats = [
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
-  const { signIn } = useAuth();
+  const { user, signIn } = useAuth();
 
   useEffect(() => {
     setIsVisible(true);
@@ -103,13 +103,23 @@ export function HeroSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
-            <button
-              onClick={() => signIn("/dashboard")}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
-            >
-              Start Free Trial — 30 Days Free
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {user ? (
+              <a
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+              >
+                Go to Dashboard
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            ) : (
+              <button
+                onClick={() => signIn("/dashboard")}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+              >
+                Start Free Trial — 30 Days Free
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
             <a
               href="#courses"
               className="inline-flex items-center gap-2 px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:border-white/60 transition-colors"
