@@ -10,12 +10,17 @@ import {
 import {
   onAuthStateChanged,
   signInWithRedirect,
-  getRedirectResult,
   signOut as firebaseSignOut,
   type User,
 } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { auth, googleProvider } from "@/lib/firebase/client";
+
+const SESSION_COOKIE_KEY = "session";
+
+function hasSessionCookie() {
+  return document.cookie.split(";").some((c) => c.trim().startsWith(`${SESSION_COOKIE_KEY}=`));
+}
 
 interface AuthContextValue {
   user:        User | null;
@@ -37,25 +42,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const router                = useRouter();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       setLoading(false);
-    });
 
-    // Handle result after Google redirect
-    getRedirectResult(auth).then(async (result) => {
-      if (!result) return;
-      const idToken     = await result.user.getIdToken();
-      const callbackUrl = sessionStorage.getItem("authCallbackUrl") ?? "/dashboard";
-      sessionStorage.removeItem("authCallbackUrl");
-      const res = await fetch("/api/auth/session", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ idToken }),
-      });
-      if (res.ok) router.push(callbackUrl);
-      else console.error("Session creation failed");
-    }).catch((err) => console.error("Redirect result error:", err));
+      // If Firebase has a user but no server session cookie, create one
+      if (firebaseUser && !hasSessionCookie()) {
+        try {
+          const idToken     = await firebaseUser.getIdToken();
+          const callbackUrl = sessionStorage.getItem("authCallbackUrl") ?? "/dashboard";
+          sessionStorage.removeItem("authCallbackUrl");
+
+          const res = await fetch("/api/auth/session", {
+            method:  "POST",
+            headers: { "Content-Type": "application/json" },
+            body:    JSON.stringify({ idToken }),
+          });
+
+          if (res.ok) router.push(callbackUrl);
+          else console.error("Session creation failed");
+        } catch (err) {
+          console.error("Session error:", err);
+        }
+      }
+    });
 
     return unsubscribe;
   }, [router]);
