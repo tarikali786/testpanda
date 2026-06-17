@@ -14,7 +14,7 @@ const benefits = [
 export function CtaSection() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const { signIn } = useAuth();
+  const { user, signIn } = useAuth();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -69,13 +69,23 @@ export function CtaSection() {
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4">
-            <button
-              onClick={() => signIn("/dashboard")}
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
-            >
-              Start Free Trial — No Credit Card
-              <ArrowRight className="w-4 h-4" />
-            </button>
+            {user ? (
+              <a
+                href="/dashboard"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+              >
+                Go to Dashboard
+                <ArrowRight className="w-4 h-4" />
+              </a>
+            ) : (
+              <button
+                onClick={() => signIn("/dashboard")}
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+              >
+                Start Free Trial — No Credit Card
+                <ArrowRight className="w-4 h-4" />
+              </button>
+            )}
             <a
               href="#pricing"
               className="inline-flex items-center gap-2 px-8 py-4 border border-white/20 text-white rounded-full font-medium hover:border-white/40 transition-colors"

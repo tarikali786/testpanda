@@ -1,22 +1,27 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { adminAuth } from "@/lib/firebase/admin";
-import { getUser, getTrial, getTrialDaysLeft, getUserSubscriptions } from "@/lib/firebase/db";
+import {
+  getUser,
+  getTrial,
+  getTrialDaysLeft,
+  getUserSubscriptions,
+} from "@/lib/firebase/db";
 import { LogOut, BookOpen, Clock, ArrowRight, CheckCircle } from "lucide-react";
 
 const courses = [
-  { name: "NAPLAN | Year 3",    color: "#a78bfa", slug: "naplan-year-3"    },
-  { name: "OC | Year 4",        color: "#f472b6", slug: "oc-year-4"        },
-  { name: "NAPLAN | Year 5",    color: "#34d399", slug: "naplan-year-5"    },
+  { name: "NAPLAN | Year 3", color: "#a78bfa", slug: "naplan-year-3" },
+  { name: "OC | Year 4", color: "#f472b6", slug: "oc-year-4" },
+  { name: "NAPLAN | Year 5", color: "#34d399", slug: "naplan-year-5" },
   { name: "Selective | Year 6", color: "#60a5fa", slug: "selective-year-6" },
-  { name: "NAPLAN | Year 7",    color: "#fbbf24", slug: "naplan-year-7"    },
-  { name: "NAPLAN | Year 9",    color: "#818cf8", slug: "naplan-year-9"    },
+  { name: "NAPLAN | Year 7", color: "#fbbf24", slug: "naplan-year-7" },
+  { name: "NAPLAN | Year 9", color: "#818cf8", slug: "naplan-year-9" },
 ];
 
 export default async function DashboardPage() {
   // Verify session cookie
   const cookieStore = await cookies();
-  const session     = cookieStore.get("session")?.value;
+  const session = cookieStore.get("session")?.value;
 
   if (!session) redirect("/auth/signin");
 
@@ -37,28 +42,39 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/auth/signin");
 
-  const daysLeft       = trial ? getTrialDaysLeft(trial) : 0;
-  const trialPercent   = trial ? Math.round(((30 - daysLeft) / 30) * 100) : 100;
-  const trialExpired   = daysLeft === 0;
-  const firstName      = user.name.split(" ")[0];
+  const daysLeft = trial ? getTrialDaysLeft(trial) : 0;
+  const trialPercent = trial ? Math.round(((30 - daysLeft) / 30) * 100) : 100;
+  const trialExpired = daysLeft === 0;
+  const firstName = user.name.split(" ")[0];
 
   // Which course slugs the user has active subscriptions for
   const subscribedCourses = new Set(
     subscriptions
       .filter((s) => s.validUntil.toDate() > new Date())
-      .map((s) => s.courseId)
+      .map((s) => s.courseId),
   );
 
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className="border-b border-foreground/10 px-6 lg:px-12 h-16 flex items-center justify-between">
-        <a href="/" className="text-xl font-display">TestPanda</a>
+      <header className=" sticky top-0 left-0 bg-black z-50 border-b border-foreground/10 py-2 px-6 lg:px-12  h-22 flex items-center justify-between">
+        <a href="/" className="text-xl font-display">
+          {" "}
+          <a href="/" className="flex items-center gap-2">
+            <img src="/logo.png" alt="TestPanda" className="h-20 w-auto" />
+          </a>
+        </a>
         <div className="flex items-center gap-4">
           {user.photoURL && (
-            <img src={user.photoURL} alt={user.name} className="w-8 h-8 rounded-full" />
+            <img
+              src={user.photoURL}
+              alt={user.name}
+              className="w-8 h-8 rounded-full"
+            />
           )}
-          <span className="text-sm text-muted-foreground hidden sm:block">{user.name}</span>
+          <span className="text-sm text-muted-foreground hidden sm:block">
+            {user.name}
+          </span>
           <form action="/api/auth/logout" method="POST">
             <button
               type="submit"
@@ -73,13 +89,16 @@ export default async function DashboardPage() {
       </header>
 
       <main className="max-w-[1200px] mx-auto px-6 lg:px-12 py-12">
-
         {/* Trial expired banner */}
         {trialExpired && (
           <div className="bg-[#eca8d6]/10 border border-[#eca8d6]/30 p-5 mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="font-medium text-foreground">Your free trial has expired.</p>
-              <p className="text-sm text-muted-foreground mt-0.5">Subscribe to continue accessing course materials.</p>
+              <p className="font-medium text-foreground">
+                Your free trial has expired.
+              </p>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Subscribe to continue accessing course materials.
+              </p>
             </div>
             <a
               href="/#pricing"
@@ -111,7 +130,9 @@ export default async function DashboardPage() {
                     <Clock className="w-4 h-4 text-[#eca8d6]" />
                     <span>Free Trial</span>
                   </div>
-                  <span className="text-sm font-mono text-[#eca8d6]">{daysLeft} days left</span>
+                  <span className="text-sm font-mono text-[#eca8d6]">
+                    {daysLeft} days left
+                  </span>
                 </div>
                 <div className="h-1.5 bg-foreground/10 rounded-full overflow-hidden">
                   <div
@@ -143,18 +164,20 @@ export default async function DashboardPage() {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
           {courses.map((course) => {
             const hasSubscription = subscribedCourses.has(course.slug);
-            const isLocked        = trialExpired && !hasSubscription;
+            const isLocked = trialExpired && !hasSubscription;
 
             return (
               <div
                 key={course.slug}
-                className={`group flex flex-col p-6 border transition-all duration-300 ${
-                  isLocked
-                    ? "bg-card border-foreground/5 opacity-60"
-                    : "bg-card border-foreground/10 hover:border-foreground/30 hover:-translate-y-0.5"
-                }`}
+                className={`group flex flex-col p-6 border transition-all duration-300 ${isLocked
+                  ? "bg-card border-foreground/5 opacity-60"
+                  : "bg-card border-foreground/10 hover:border-foreground/30 hover:-translate-y-0.5"
+                  }`}
               >
-                <div className="w-8 h-1 mb-4" style={{ backgroundColor: course.color }} />
+                <div
+                  className="w-8 h-1 mb-4"
+                  style={{ backgroundColor: course.color }}
+                />
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-muted-foreground" />
@@ -165,7 +188,11 @@ export default async function DashboardPage() {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mb-5">
-                  {hasSubscription ? "Full access" : isLocked ? "Subscribe to unlock" : "Demo papers available"}
+                  {hasSubscription
+                    ? "Full access"
+                    : isLocked
+                      ? "Subscribe to unlock"
+                      : "Demo papers available"}
                 </p>
                 <div className="mt-auto">
                   {isLocked ? (
@@ -198,16 +225,30 @@ export default async function DashboardPage() {
             {subscriptions.map((sub) => {
               const course = courses.find((c) => c.slug === sub.courseId);
               return (
-                <div key={sub.id} className="flex items-center gap-4 p-5 border border-foreground/10 bg-card">
+                <div
+                  key={sub.id}
+                  className="flex items-center gap-4 p-5 border border-foreground/10 bg-card"
+                >
                   <CheckCircle className="w-5 h-5 text-[#34d399] shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium text-sm">{course?.name ?? sub.courseId}</p>
+                    <p className="font-medium text-sm">
+                      {course?.name ?? sub.courseId}
+                    </p>
                     <p className="text-xs text-muted-foreground">
-                      Valid until {sub.validUntil.toDate().toLocaleDateString("en-AU", { day: "numeric", month: "long", year: "numeric" })}
+                      Valid until{" "}
+                      {sub.validUntil
+                        .toDate()
+                        .toLocaleDateString("en-AU", {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        })}
                     </p>
                   </div>
                   {!sub.driveAccessGranted && (
-                    <span className="text-xs font-mono text-[#eca8d6]">Drive pending</span>
+                    <span className="text-xs font-mono text-[#eca8d6]">
+                      Drive pending
+                    </span>
                   )}
                 </div>
               );
@@ -215,7 +256,9 @@ export default async function DashboardPage() {
           </div>
         ) : (
           <div className="border border-foreground/10 p-8 text-center">
-            <p className="text-muted-foreground text-sm mb-4">No active subscriptions yet.</p>
+            <p className="text-muted-foreground text-sm mb-4">
+              No active subscriptions yet.
+            </p>
             <a
               href="/#pricing"
               className="inline-flex items-center gap-2 text-sm font-medium border border-foreground/20 px-5 py-2.5 hover:border-foreground transition-colors"

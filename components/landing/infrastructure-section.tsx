@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useAuth } from "@/components/providers/auth-provider";
 
 const courses = [
   {
@@ -57,6 +58,7 @@ const courses = [
 export function CoursesSection() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { user, signIn } = useAuth();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -162,14 +164,25 @@ export function CoursesSection() {
 
               {/* CTA */}
               <div className="mt-auto">
-                <a
-                  href="#"
-                  className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
-                  style={{ color: course.color }}
-                >
-                  Start Free Trial
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </a>
+                {user ? (
+                  <a
+                    href="/dashboard"
+                    className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
+                    style={{ color: course.color }}
+                  >
+                    Open Course
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </a>
+                ) : (
+                  <button
+                    onClick={() => signIn("/dashboard")}
+                    className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
+                    style={{ color: course.color }}
+                  >
+                    Start Free Trial
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                  </button>
+                )}
               </div>
             </div>
           ))}
