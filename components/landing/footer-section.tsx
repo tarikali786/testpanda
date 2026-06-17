@@ -4,29 +4,29 @@ import { ArrowUpRight } from "lucide-react";
 
 const footerLinks = {
   Platform: [
-    { name: "Courses",      href: "#courses"      },
+    { name: "Courses", href: "#courses" },
     { name: "How It Works", href: "#how-it-works" },
-    { name: "Pricing",      href: "#pricing"      },
-    { name: "FAQ",          href: "#faq"          },
+    { name: "Pricing", href: "#pricing" },
+    { name: "FAQ", href: "#faq" },
   ],
   Courses: [
-    { name: "NAPLAN Year 3",    href: "#courses" },
-    { name: "OC Year 4",        href: "#courses" },
-    { name: "NAPLAN Year 5",    href: "#courses" },
+    { name: "NAPLAN Year 3", href: "#courses" },
+    { name: "OC Year 4", href: "#courses" },
+    { name: "NAPLAN Year 5", href: "#courses" },
     { name: "Selective Year 6", href: "#courses" },
-    { name: "NAPLAN Year 7",    href: "#courses" },
-    { name: "NAPLAN Year 9",    href: "#courses" },
+    { name: "NAPLAN Year 7", href: "#courses" },
+    { name: "NAPLAN Year 9", href: "#courses" },
   ],
   Company: [
-    { name: "About",   href: "#"                              },
-    { name: "Contact", href: "mailto:hello@testpanda.com.au"  },
-    { name: "Privacy", href: "#"                              },
-    { name: "Terms",   href: "#"                              },
+    { name: "About", href: "#" },
+    { name: "Contact", href: "mailto:hello@testpanda.com.au" },
+    { name: "Privacy", href: "#" },
+    { name: "Terms", href: "#" },
   ],
 };
 
 const socialLinks = [
-  { name: "Facebook",  href: "#" },
+  { name: "Facebook", href: "#" },
   { name: "Instagram", href: "#" },
 ];
 
@@ -51,7 +51,8 @@ export function FooterSection() {
             {/* Brand Column */}
             <div className="col-span-2">
               <a href="#" className="inline-flex items-center gap-2 mb-6">
-                <span className="text-2xl font-display text-white">TestPanda</span>
+                <img src="/logo.png" alt="TestPanda" className={`  h-auto
+              w-auto `} />
               </a>
 
               <p className="text-white/50 leading-relaxed mb-8 max-w-xs text-sm">
