@@ -1,102 +1,88 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
+import { useAuth } from "@/components/providers/auth-provider";
+
+const benefits = [
+  "30-day free trial",
+  "No credit card required",
+  "All 6 courses included",
+  "Cancel anytime",
+];
 
 export function CtaSection() {
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const sectionRef = useRef<HTMLElement>(null);
+  const { signIn } = useAuth();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true);
-      },
+      ([entry]) => { if (entry.isIntersecting) setIsVisible(true); },
       { threshold: 0.2 }
     );
-
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    setMousePosition({
-      x: ((e.clientX - rect.left) / rect.width) * 100,
-      y: ((e.clientY - rect.top) / rect.height) * 100,
-    });
-  };
-
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+    <section
+      ref={sectionRef}
+      className="relative py-32 lg:py-40 bg-[oklch(0.09_0.01_260)] overflow-hidden"
+    >
+      {/* Decorative glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[#eca8d6]/5 rounded-full blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12 text-center">
         <div
-          className={`relative border border-foreground transition-all duration-1000 ${
+          className={`transition-all duration-1000 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
           }`}
-          onMouseMove={handleMouseMove}
         >
-          {/* Spotlight effect */}
-          <div 
-            className="absolute inset-0 opacity-10 pointer-events-none transition-opacity duration-300"
-            style={{
-              background: `radial-gradient(600px circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(0,0,0,0.15), transparent 40%)`
-            }}
-          />
-          
-          <div className="relative z-10 px-8 lg:px-16 py-16 lg:py-24">
-            <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-              {/* Left content */}
-              <div className="flex-1">
-                <h2 className="text-6xl md:text-7xl lg:text-[72px] font-display tracking-tight mb-8 leading-[0.95]">
-                  Ready to delegate
-                  <br />
-                  to AI agents?
-                </h2>
+          <span className="inline-flex items-center gap-3 text-sm font-mono text-white/40 mb-8">
+            <span className="w-10 h-px bg-white/20" />
+            Get Started Today
+            <span className="w-10 h-px bg-white/20" />
+          </span>
 
-                <p className="text-xl text-muted-foreground mb-12 leading-relaxed max-w-xl">
-                  Join teams automating complex workflows with COMPUTE agents. 
-                  Deploy your first agent in minutes.
-                </p>
+          <h2 className="text-5xl md:text-6xl lg:text-[96px] font-display tracking-tight leading-[0.92] mb-6">
+            Start your 30-day
+            <br />
+            <span className="text-white/30">free trial today.</span>
+          </h2>
 
-                <div className="flex flex-col sm:flex-row items-start gap-4">
-                  <Button
-                    size="lg"
-                    className="bg-foreground hover:bg-foreground/90 text-background px-8 h-14 text-base rounded-full group"
-                  >
-                    Deploy your first agent
-                    <ArrowRight className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="h-14 px-8 text-base rounded-full border-foreground/20 hover:bg-foreground/5"
-                  >
-                    Book a demo
-                  </Button>
-                </div>
+          <p className="text-lg text-white/50 leading-relaxed mb-10 max-w-xl mx-auto">
+            Join over 1,000 Australian families already preparing their children for NAPLAN, OC &amp; Selective exams.
+          </p>
 
-                <p className="text-sm text-muted-foreground mt-8 font-mono">
-                  1,000 free tasks with COMPUTE
-                </p>
-              </div>
-
-              {/* Right image */}
-              <div className="hidden lg:flex items-end justify-center w-[600px] h-[650px] -mr-16">
-                <img
-                  src="/images/bridge.png"
-                  alt="Two trees connected by glowing arcs"
-                  className="w-full h-full object-contain object-bottom"
-                />
-              </div>
-            </div>
+          {/* Benefits */}
+          <div className="flex flex-wrap items-center justify-center gap-5 mb-12">
+            {benefits.map((b) => (
+              <span key={b} className="flex items-center gap-2 text-sm text-white/50">
+                <Check className="w-4 h-4 text-[#eca8d6] shrink-0" />
+                {b}
+              </span>
+            ))}
           </div>
 
-          {/* Decorative corner */}
-          <div className="absolute top-0 right-0 w-32 h-32 border-b border-l border-foreground/10" />
-          <div className="absolute bottom-0 left-0 w-32 h-32 border-t border-r border-foreground/10" />
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center justify-center gap-4">
+            <button
+              onClick={() => signIn("/dashboard")}
+              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+            >
+              Start Free Trial — No Credit Card
+              <ArrowRight className="w-4 h-4" />
+            </button>
+            <a
+              href="#pricing"
+              className="inline-flex items-center gap-2 px-8 py-4 border border-white/20 text-white rounded-full font-medium hover:border-white/40 transition-colors"
+            >
+              View Pricing
+            </a>
+          </div>
         </div>
       </div>
     </section>
