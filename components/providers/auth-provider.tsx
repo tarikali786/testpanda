@@ -9,7 +9,8 @@ import {
 } from "react";
 import {
   onAuthStateChanged,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut as firebaseSignOut,
   type User,
 } from "firebase/auth";
@@ -40,27 +41,29 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(firebaseUser);
       setLoading(false);
     });
-    return unsubscribe;
-  }, []);
 
-  const signIn = useCallback(async (callbackUrl = "/dashboard") => {
-    try {
-      const result  = await signInWithPopup(auth, googleProvider);
-      const idToken = await result.user.getIdToken();
-
+    // Handle result after Google redirect
+    getRedirectResult(auth).then(async (result) => {
+      if (!result) return;
+      const idToken     = await result.user.getIdToken();
+      const callbackUrl = sessionStorage.getItem("authCallbackUrl") ?? "/dashboard";
+      sessionStorage.removeItem("authCallbackUrl");
       const res = await fetch("/api/auth/session", {
         method:  "POST",
         headers: { "Content-Type": "application/json" },
         body:    JSON.stringify({ idToken }),
       });
+      if (res.ok) router.push(callbackUrl);
+      else console.error("Session creation failed");
+    }).catch((err) => console.error("Redirect result error:", err));
 
-      if (!res.ok) throw new Error("Session creation failed");
-
-      router.push(callbackUrl);
-    } catch (error) {
-      console.error("Sign-in error:", error);
-    }
+    return unsubscribe;
   }, [router]);
+
+  const signIn = useCallback(async (callbackUrl = "/dashboard") => {
+    sessionStorage.setItem("authCallbackUrl", callbackUrl);
+    await signInWithRedirect(auth, googleProvider);
+  }, []);
 
   const signOut = useCallback(async () => {
     await fetch("/api/auth/logout", { method: "POST" });
