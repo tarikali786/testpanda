@@ -15,8 +15,9 @@ const courses = [
 export default async function DashboardPage() {
   const supabase = await createClient();
 
-  const { data: { user: authUser } } = await supabase.auth.getUser();
-  if (!authUser) redirect("/auth/signin");
+  const { data: { session } } = await supabase.auth.getSession();
+  if (!session) redirect("/auth/signin");
+  const authUser = session.user;
 
   const [user, trial, subscriptions] = await Promise.all([
     getUser(supabase, authUser.id),
