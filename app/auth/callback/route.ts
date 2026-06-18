@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
 import { getAdminClient } from "@/lib/supabase/admin";
 
 export const runtime = "nodejs";
@@ -14,17 +13,18 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(`${origin}/auth/signin?error=missing_code`);
   }
 
-  const cookieStore = await cookies();
+  const response = NextResponse.redirect(`${origin}${next}`);
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() { return cookieStore.getAll(); },
+        getAll() { return req.cookies.getAll(); },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options);
+          });
         },
       },
     }
@@ -37,7 +37,6 @@ export async function GET(req: NextRequest) {
 
   const { id: uid, email, user_metadata } = data.user;
 
-  // Create user + trial on first sign-in
   const { data: existingUser } = await getAdminClient()
     .from("users")
     .select("uid")
@@ -59,5 +58,5 @@ export async function GET(req: NextRequest) {
     });
   }
 
-  return NextResponse.redirect(`${origin}${next}`);
+  return response;
 }
