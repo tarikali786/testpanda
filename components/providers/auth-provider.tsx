@@ -1,27 +1,14 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
-import {
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut as firebaseSignOut,
-  type User,
-} from "firebase/auth";
-import { useRouter } from "next/navigation";
-import { auth, googleProvider } from "@/lib/firebase/client";
-
+import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 interface AuthContextValue {
-  user:        User | null;
-  loading:     boolean;
-  signIn:      (callbackUrl?: string) => Promise<void>;
-  signOut:     () => Promise<void>;
+  user:    User | null;
+  loading: boolean;
+  signIn:  (callbackUrl?: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue>({
@@ -34,59 +21,35 @@ const AuthContext = createContext<AuthContextValue>({
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser]       = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const router                = useRouter();
+  const supabase              = createClient();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      setUser(firebaseUser);
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
       setLoading(false);
-
-      if (firebaseUser) {
-        try {
-          const idToken          = await firebaseUser.getIdToken();
-          const storedCallback   = sessionStorage.getItem("authCallbackUrl");
-          if (storedCallback) sessionStorage.removeItem("authCallbackUrl");
-
-          // Also check URL params — set by middleware when session cookie is missing
-          const urlCallback = new URLSearchParams(window.location.search).get("callbackUrl");
-          const redirectTo  = storedCallback || urlCallback || null;
-
-          const res = await fetch("/api/auth/session", {
-            method:  "POST",
-            headers: { "Content-Type": "application/json" },
-            body:    JSON.stringify({ idToken }),
-          });
-
-          if (res.ok && redirectTo) router.push(redirectTo);
-          else if (res.ok && window.location.pathname === "/auth/signin") router.push("/dashboard");
-          else if (!res.ok) {
-            const text = await res.text().catch(() => "");
-            console.error("Session creation failed:", res.status, text);
-          }
-        } catch (err) {
-          console.error("Session error:", err);
-        }
-      }
     });
 
-    return unsubscribe;
-  }, [router]);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const signIn = useCallback(async (callbackUrl = "/dashboard") => {
-    sessionStorage.setItem("authCallbackUrl", callbackUrl);
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (err) {
-      sessionStorage.removeItem("authCallbackUrl");
-      console.error("Sign in error:", err);
-    }
+    await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(callbackUrl)}`,
+      },
+    });
   }, []);
 
   const signOut = useCallback(async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    await firebaseSignOut(auth);
-    router.push("/");
-  }, [router]);
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, loading, signIn, signOut }}>
