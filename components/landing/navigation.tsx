@@ -73,8 +73,8 @@ export function Navigation() {
                   <LayoutDashboard className="w-4 h-4" />
                   Dashboard
                 </a>
-                {user.photoURL && (
-                  <img src={user.photoURL} alt={user.displayName ?? ""} referrerPolicy="no-referrer" className="w-8 h-8 rounded-full border border-foreground/20" />
+                {user.user_metadata?.avatar_url && (
+                  <img src={user.user_metadata.avatar_url} alt={user.user_metadata?.full_name ?? ""} referrerPolicy="no-referrer" className="w-8 h-8 rounded-full border border-foreground/20" />
                 )}
                 <button
                   onClick={signOut}
