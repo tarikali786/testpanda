@@ -39,21 +39,22 @@ function SignInForm() {
         const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: name } },
+          options: {
+            data:        { full_name: name },
+            emailRedirectTo: `${window.location.origin}/auth/confirm`,
+          },
         });
         if (signUpError) throw signUpError;
 
-        // If session returned directly (confirm email OFF), use it
-        if (signUpData.session) {
-          access_token = signUpData.session.access_token;
-          userId       = signUpData.session.user.id;
-        } else {
-          // Fallback: sign in manually
-          const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-          if (signInError) throw signInError;
-          access_token = data.session.access_token;
-          userId       = data.session.user.id;
+        if (!signUpData.session) {
+          // Email confirmation required
+          setError("✅ Check your email and click the verification link to continue.");
+          setLoading(false);
+          return;
         }
+
+        access_token = signUpData.session.access_token;
+        userId       = signUpData.session.user.id;
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -148,7 +149,7 @@ function SignInForm() {
             </div>
 
             {error && (
-              <p className="text-sm text-red-500">{error}</p>
+              <p className={`text-sm ${error.startsWith("✅") ? "text-green-600" : "text-red-500"}`}>{error}</p>
             )}
 
             <button
