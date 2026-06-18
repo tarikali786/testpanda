@@ -58,11 +58,8 @@ export default async function DashboardPage() {
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
       <header className="sticky top-0 left-0 bg-background/95 backdrop-blur-xl z-50 border-b border-foreground/10 py-2 px-6 lg:px-12 h-22 flex items-center justify-between">
-        <a href="/" className="text-xl font-display">
-          {" "}
-          <a href="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="TestPanda" className="h-20 w-auto" />
-          </a>
+        <a href="/" className="flex items-center gap-2">
+          <img src="/logo.png" alt="TestPanda" className="h-20 w-auto" />
         </a>
         <div className="flex items-center gap-4">
           {user.photoURL && (
@@ -75,16 +72,8 @@ export default async function DashboardPage() {
           <span className="text-sm text-muted-foreground hidden sm:block">
             {user.name}
           </span>
-          <form action="/api/auth/logout" method="POST">
-            <button
-              type="submit"
-              className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              formAction="/api/auth/logout"
-            >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Sign Out</span>
-            </button>
-          </form>
+      
+      
         </div>
       </header>
 

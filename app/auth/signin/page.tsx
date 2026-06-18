@@ -7,7 +7,19 @@ import { useAuth } from "@/components/providers/auth-provider";
 function SignInForm() {
   const searchParams  = useSearchParams();
   const callbackUrl   = searchParams.get("callbackUrl") ?? "/dashboard";
-  const { signIn, loading } = useAuth();
+  const { user, signIn, loading } = useAuth();
+
+  // Already logged in — the auth provider will redirect, just show a spinner
+  if (!loading && user) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-2 border-foreground/20 border-t-foreground rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-sm text-muted-foreground">Redirecting to dashboard…</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4">
