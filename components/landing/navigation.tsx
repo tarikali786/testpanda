@@ -51,11 +51,11 @@ export function Navigation() {
               <a
                 key={link.name}
                 href={link.href}
-                className={`text-sm transition-colors duration-300 relative group ${isScrolled ? "text-foreground/70 hover:text-foreground" : "text-white/70 hover:text-white"
+                className={`text-sm transition-colors duration-300 relative group ${isScrolled ? "text-foreground/70 hover:text-foreground" : "text-foreground/70 hover:text-foreground"
                   }`}
               >
                 {link.name}
-                <span className={`absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full ${isScrolled ? "bg-foreground" : "bg-white"}`} />
+                <span className="absolute -bottom-1 left-0 w-0 h-px transition-all duration-300 group-hover:w-full bg-foreground" />
               </a>
             ))}
           </div>
@@ -68,8 +68,7 @@ export function Navigation() {
               <div className="flex items-center gap-3">
                 <a
                   href="/dashboard"
-                  className={`flex items-center gap-2 text-sm transition-colors ${isScrolled ? "text-foreground/70 hover:text-foreground" : "text-white/70 hover:text-white"
-                    }`}
+                  className="flex items-center gap-2 text-sm transition-colors text-foreground/70 hover:text-foreground"
                 >
                   <LayoutDashboard className="w-4 h-4" />
                   Dashboard
@@ -79,8 +78,7 @@ export function Navigation() {
                 )}
                 <button
                   onClick={signOut}
-                  className={`flex items-center gap-1.5 text-sm transition-colors ${isScrolled ? "text-foreground/50 hover:text-foreground" : "text-white/50 hover:text-white"
-                    }`}
+                  className="flex items-center gap-1.5 text-sm transition-colors text-foreground/50 hover:text-foreground"
                 >
                   <LogOut className="w-3.5 h-3.5" />
                   Sign Out
@@ -90,8 +88,7 @@ export function Navigation() {
               <>
                 <button
                   onClick={() => signIn("/dashboard")}
-                  className={`text-sm transition-colors duration-500 ${isScrolled ? "text-foreground/70 hover:text-foreground" : "text-white/70 hover:text-white"
-                    }`}
+                  className="text-sm transition-colors duration-500 text-foreground/70 hover:text-foreground"
                 >
                   Sign In
                 </button>
@@ -100,7 +97,7 @@ export function Navigation() {
                   onClick={() => signIn("/dashboard")}
                   className={`rounded-full transition-all duration-500 ${isScrolled
                     ? "bg-foreground hover:bg-foreground/90 text-background px-4 h-8 text-xs"
-                    : "bg-white hover:bg-white/90 text-black px-6"
+                    : "bg-foreground hover:bg-foreground/90 text-background px-6"
                     }`}
                 >
                   Start Free Trial
@@ -112,8 +109,7 @@ export function Navigation() {
           {/* Mobile button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className={`md:hidden p-2 transition-colors duration-500 ${isScrolled || isMobileMenuOpen ? "text-foreground" : "text-white"
-              }`}
+            className="md:hidden p-2 transition-colors duration-500 text-foreground"
             aria-label="Toggle menu"
           >
             {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}

@@ -44,17 +44,8 @@ export function TestimonialsSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-24 lg:py-32 bg-[oklch(0.09_0.008_260)] overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/world-3i68QNWJwmO7W19ztZWbevAwJQHzYL.png"
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover object-center opacity-15"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.09_0.008_260)]/60 via-transparent to-[oklch(0.09_0.008_260)]/80" />
-      </div>
+    <section ref={sectionRef} className="relative py-10 overflow-hidden">
+      
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
         <div className="mb-16 lg:mb-20">

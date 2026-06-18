@@ -32,17 +32,8 @@ const socialLinks = [
 
 export function FooterSection() {
   return (
-    <footer className="relative bg-black">
-      {/* Panoramic banner image */}
-      <div className="relative w-full h-[340px] md:h-[420px] overflow-hidden">
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Upscaled%20Image%20%2810%29-UnDKstODkIENp5xqTYUEpt0Sm8tNOw.png"
-          alt="Bioluminescent landscape"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40" />
-      </div>
+    <footer className="relative bg-secondary">
+    
 
       {/* Footer content */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
@@ -55,7 +46,7 @@ export function FooterSection() {
               w-auto `} />
               </a>
 
-              <p className="text-white/50 leading-relaxed mb-8 max-w-xs text-sm">
+              <p className="text-muted-foreground leading-relaxed mb-8 max-w-xs text-sm">
                 Australia's smartest exam prep platform for NAPLAN, OC &amp; Selective High School. Trusted by 1,000+ families across NSW.
               </p>
 
@@ -64,7 +55,7 @@ export function FooterSection() {
                   <a
                     key={link.name}
                     href={link.href}
-                    className="text-sm text-white/40 hover:text-white transition-colors flex items-center gap-1 group"
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1 group"
                   >
                     {link.name}
                     <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
@@ -76,13 +67,13 @@ export function FooterSection() {
             {/* Link Columns */}
             {Object.entries(footerLinks).map(([title, links]) => (
               <div key={title}>
-                <h3 className="text-sm font-medium text-white mb-6">{title}</h3>
+                <h3 className="text-sm font-medium text-foreground mb-6">{title}</h3>
                 <ul className="space-y-4">
                   {links.map((link) => (
                     <li key={link.name}>
                       <a
                         href={link.href}
-                        className="text-sm text-white/40 hover:text-white transition-colors"
+                        className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                       >
                         {link.name}
                       </a>
@@ -95,11 +86,11 @@ export function FooterSection() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="py-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-white/30">
+        <div className="py-8 border-t border-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground">
             &copy; 2024 TestPanda. All rights reserved.
           </p>
-          <div className="flex items-center gap-4 text-sm text-white/30">
+          <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <span className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-[#eca8d6]" />
               Platform operational

@@ -5,10 +5,10 @@ import { ArrowRight } from "lucide-react";
 import { useAuth } from "@/components/providers/auth-provider";
 
 const stats = [
-  { value: "6",      label: "courses available"       },
-  { value: "500+",   label: "practice questions"      },
-  { value: "30-Day", label: "free trial"              },
-  { value: "1,000+", label: "families trust us"       },
+  { value: "6", label: "courses available" },
+  { value: "500+", label: "practice questions" },
+  { value: "30-Day", label: "free trial" },
+  { value: "1,000+", label: "families trust us" },
 ];
 
 export function HeroSection() {
@@ -20,24 +20,17 @@ export function HeroSection() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex flex-col justify-center items-start overflow-hidden bg-black">
-      {/* Background video */}
+    <section className="relative  flex flex-col justify-center items-start overflow-hidden bg-white">
+      {/* Background image */}
       <div className="absolute inset-0 z-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
+        <img
+          src="/images/hero.png"
+          alt=""
           aria-hidden="true"
-          className="w-full h-full object-cover object-center opacity-80"
-        >
-          <source
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/bg-hero-0BnFGdr81Ifnj3WbBZoNt1KE4D5DMT.mp4"
-            type="video/mp4"
-          />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+          className="w-full h-full object-cover object-center opacity-50"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-white/85 via-white/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-transparent to-white/70" />
       </div>
 
       {/* Subtle grid lines */}
@@ -45,30 +38,29 @@ export function HeroSection() {
         {[...Array(8)].map((_, i) => (
           <div
             key={`h-${i}`}
-            className="absolute h-px bg-white/10"
+            className="absolute h-px bg-black/10"
             style={{ top: `${12.5 * (i + 1)}%`, left: 0, right: 0 }}
           />
         ))}
         {[...Array(12)].map((_, i) => (
           <div
             key={`v-${i}`}
-            className="absolute w-px bg-white/10"
+            className="absolute w-px bg-black/10"
             style={{ left: `${8.33 * (i + 1)}%`, top: 0, bottom: 0 }}
           />
         ))}
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-48 lg:py-40">
+      <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 pt-32 pb-10">
         <div className="lg:max-w-[55%]">
           {/* Eyebrow */}
           <div
-            className={`mb-8 transition-all duration-700 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`mb-8 transition-all duration-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
-            <span className="inline-flex items-center gap-3 text-sm font-mono text-white/60">
-              <span className="w-8 h-px bg-white/30" />
+            <span className="inline-flex items-center gap-3 text-sm font-mono text-black/60">
+              <span className="w-8 h-px bg-black/30" />
               Australia's Smartest Exam Prep Platform
             </span>
           </div>
@@ -76,9 +68,8 @@ export function HeroSection() {
           {/* Main headline */}
           <div className="mb-8">
             <h1
-              className={`text-left text-[clamp(2rem,6vw,7rem)] font-display leading-[0.92] tracking-tight text-white transition-all duration-1000 ${
-                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
+              className={`text-left text-[clamp(2rem,6vw,7rem)] font-display leading-[0.92] tracking-tight text-black transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
             >
               <span className="block">Prepare for</span>
               <span className="block">NAPLAN, OC &amp;</span>
@@ -90,23 +81,21 @@ export function HeroSection() {
 
           {/* Subtext */}
           <p
-            className={`text-lg lg:text-xl text-white/60 leading-relaxed max-w-lg mb-10 transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`text-lg lg:text-xl text-black/60 leading-relaxed max-w-lg mb-10 transition-all duration-1000 delay-200 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             Give your child the edge with expert practice papers, timed test conditions, and comprehensive study materials for Years 3–9.
           </p>
 
           {/* CTAs */}
           <div
-            className={`flex flex-wrap gap-4 transition-all duration-1000 delay-300 ${
-              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-            }`}
+            className={`flex flex-wrap gap-4 transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
           >
             {user ? (
               <a
                 href="/dashboard"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors"
               >
                 Go to Dashboard
                 <ArrowRight className="w-4 h-4" />
@@ -114,7 +103,7 @@ export function HeroSection() {
             ) : (
               <button
                 onClick={() => signIn("/dashboard")}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-black rounded-full font-medium hover:bg-white/90 transition-colors"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full font-medium hover:bg-black/90 transition-colors"
               >
                 Start Free Trial — 30 Days Free
                 <ArrowRight className="w-4 h-4" />
@@ -122,29 +111,23 @@ export function HeroSection() {
             )}
             <a
               href="#courses"
-              className="inline-flex items-center gap-2 px-8 py-4 border border-white/30 text-white rounded-full font-medium hover:border-white/60 transition-colors"
+              className="inline-flex items-center gap-2 px-8 py-4 border border-black/30 text-black rounded-full font-medium hover:border-black/60 transition-colors"
             >
               View Courses
             </a>
           </div>
         </div>
-      </div>
-
-      {/* Stats bar */}
-      <div
-        className={`absolute bottom-12 left-0 right-0 px-6 lg:px-12 transition-all duration-700 delay-500 ${
-          isVisible ? "opacity-100" : "opacity-0"
-        }`}
-      >
-        <div className="max-w-[1400px] mx-auto flex flex-wrap items-start gap-10 lg:gap-20">
+        <div className=" pt-10 mx-auto flex flex-wrap items-start gap-10 lg:gap-20">
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col gap-1">
-              <span className="text-3xl lg:text-4xl font-display text-white">{stat.value}</span>
-              <span className="text-xs text-white/50 leading-tight">{stat.label}</span>
+              <span className="text-3xl lg:text-4xl font-display text-black">{stat.value}</span>
+              <span className="text-xs text-black/50 leading-tight">{stat.label}</span>
             </div>
           ))}
         </div>
       </div>
+
+     
     </section>
   );
 }

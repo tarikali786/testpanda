@@ -45,17 +45,8 @@ export function FaqSection() {
   }, []);
 
   return (
-    <section id="faq" ref={sectionRef} className="relative py-24 lg:py-32 bg-[oklch(0.09_0.008_260)] overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0 z-0">
-        <img
-          src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/real-time-graph-INFmn3u0MlUwvNPynoIhwxtPaPjxM5.png"
-          alt=""
-          aria-hidden="true"
-          className="w-full h-full object-cover object-center opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.09_0.008_260)]/70 via-transparent to-[oklch(0.09_0.008_260)]/70" />
-      </div>
+    <section id="faq" ref={sectionRef} className="relative  bg-background overflow-hidden">
+     
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
           {/* Left: Header */}

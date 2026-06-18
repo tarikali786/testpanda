@@ -123,7 +123,7 @@ function ParticleVisualization() {
 
         ctx.beginPath();
         ctx.arc(x, y, p.radius + pulse * 0.8, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
         ctx.fill();
       });
 
@@ -162,7 +162,7 @@ export function FeaturesSection() {
   }, []);
 
   return (
-    <section id="features" ref={sectionRef} className="relative py-24 lg:py-32 overflow-hidden bg-background">
+    <section id="features" ref={sectionRef} className="relative py-10 overflow-hidden bg-background">
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
         <div className="relative mb-24 lg:mb-32">
@@ -196,12 +196,12 @@ export function FeaturesSection() {
 
         {/* Large feature card — particles + image */}
         <div
-          className={`lg:col-span-12 relative bg-black border border-foreground/10 min-h-[500px] overflow-hidden group transition-all duration-700 flex mb-4 ${
+          className={`lg:col-span-12 relative  border border-foreground/10 min-h-[500px] overflow-hidden group transition-all duration-700 flex mb-4 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
         >
           {/* Left: text */}
-          <div className="relative flex-1 p-8 lg:p-12 bg-black">
+          <div className="relative flex-1 p-8 lg:p-12 ">
             <ParticleVisualization />
             <div className="relative z-10">
               <span className="font-mono text-sm text-muted-foreground">{features[0].number}</span>
@@ -223,13 +223,12 @@ export function FeaturesSection() {
           {/* Right: image */}
           <div className="hidden lg:block relative w-[42%] shrink-0 overflow-hidden">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Upscaled%20Image%20%2812%29-ng3RrNnsPMJ5CrtOjcPTmhHg01W11q.png"
+              src="/images/feature.png"
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover object-center"
-              style={{ transform: "scaleX(-1)" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-transparent" />
           </div>
         </div>
 
@@ -260,7 +259,7 @@ export function FeaturesSection() {
 
         {/* Last large card */}
         <div
-          className={`mt-4 relative bg-black border border-foreground/10 min-h-[300px] overflow-hidden group transition-all duration-700 flex ${
+          className={`mt-4 relative  border border-foreground/10 min-h-[300px] overflow-hidden group transition-all duration-700 flex ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
           style={{ transitionDelay: "500ms" }}
@@ -283,12 +282,12 @@ export function FeaturesSection() {
 
           <div className="hidden lg:block relative w-[42%] shrink-0 overflow-hidden">
             <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Upscaled%20Image%20%2812%29-ng3RrNnsPMJ5CrtOjcPTmhHg01W11q.png"
+              src="/images/feature.png"
               alt=""
               aria-hidden="true"
               className="absolute inset-0 w-full h-full object-cover object-center opacity-60"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/50 to-transparent" />
           </div>
         </div>
       </div>

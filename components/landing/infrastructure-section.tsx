@@ -77,16 +77,16 @@ export function CoursesSection() {
           isVisible ? "opacity-100" : "opacity-0"
         }`}
       >
-        {/* Left: sphere/world image */}
-        <div className="relative w-full lg:w-[45%] h-[320px] lg:h-[480px] shrink-0 flex items-center justify-center">
+        {/* Left: course image */}
+        <div className="relative w-full lg:w-[45%] h-[320px] lg:h-[480px] shrink-0 overflow-hidden">
           <img
-            src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/world-3i68QNWJwmO7W19ztZWbevAwJQHzYL.png"
+            src="/images/course.png"
             alt=""
             aria-hidden="true"
-            className="w-full h-full object-contain object-center"
+            className="w-full h-full object-cover object-center"
           />
-          {/* Fade right edge into background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background hidden lg:block" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/30" />
         </div>
 
         {/* Right: headline */}

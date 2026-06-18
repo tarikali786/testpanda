@@ -54,9 +54,8 @@ export function HowItWorksSection() {
     <section
       id="how-it-works"
       ref={sectionRef}
-      className="relative py-24 lg:py-32 bg-[oklch(0.09_0.01_260)] text-white overflow-hidden"
+      className="relative py-10  text-foreground overflow-hidden"
     >
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-white/[0.02] blur-[100px] pointer-events-none" />
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header + tree image */}
@@ -68,37 +67,24 @@ export function HowItWorksSection() {
                 isVisible ? "translate-x-0 opacity-100" : "-translate-x-12 opacity-0"
               }`}
             >
-              <span className="inline-flex items-center gap-3 text-sm font-mono text-white/40 mb-8">
-                <span className="w-12 h-px bg-white/20" />
+              <span className="inline-flex items-center gap-3 text-sm font-mono text-foreground/70 mb-8">
+                <span className="w-12 h-px bg-foreground/40" />
                 How It Works
               </span>
             </div>
 
             <h2
-              className={`text-6xl md:text-7xl lg:text-[128px] font-display tracking-tight leading-[0.85] transition-all duration-1000 delay-100 ${
+              className={`text-6xl md:text-7xl mb-10 lg:text-[128px] font-display tracking-tight leading-[0.85] transition-all duration-1000 delay-100 ${
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
               }`}
             >
               <span className="block">Simple.</span>
-              <span className="block text-white/30">Fast.</span>
-              <span className="block text-white/10">Effective.</span>
+              <span className="block text-foreground/80">Fast.</span>
+              <span className="block text-foreground/50">Effective.</span>
             </h2>
           </div>
 
-          {/* Right: tree image */}
-          <div
-            className={`relative h-[320px] lg:h-[640px] overflow-hidden transition-all duration-1000 delay-200 ${
-              isVisible ? "opacity-100" : "opacity-0"
-            }`}
-          >
-            <img
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/tree-uAia6REvB137CQyHFCf0za3O6h2zKO.png"
-              alt=""
-              aria-hidden="true"
-              className="absolute bottom-0 left-0 w-full h-full object-contain object-bottom"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.09_0.01_260)] via-transparent to-transparent pointer-events-none" />
-          </div>
+          
         </div>
 
         {/* Steps */}
@@ -110,20 +96,20 @@ export function HowItWorksSection() {
               onClick={() => setActiveStep(index)}
               className={`relative text-left p-8 lg:p-12 border transition-all duration-500 ${
                 activeStep === index
-                  ? "bg-[#000000] border-white/60"
-                  : "bg-[#000000] border-white/25 hover:border-white/50"
+                  ? "bg-background border-foreground/60"
+                  : "bg-background border-foreground/25 hover:border-foreground/50"
               }`}
             >
               {/* Step number with progress line */}
               <div className="flex items-center gap-4 mb-8">
                 <span
                   className={`text-4xl font-display transition-colors duration-300 ${
-                    activeStep === index ? "text-[#eca8d6]" : "text-white/20"
+                    activeStep === index ? "text-[#eca8d6]" : "text-foreground/20"
                   }`}
                 >
                   {step.number}
                 </span>
-                <div className="flex-1 h-px bg-white/10 overflow-hidden">
+                <div className="flex-1 h-px bg-foreground/10 overflow-hidden">
                   {activeStep === index && (
                     <div className="h-full bg-[#eca8d6]/50 animate-progress" />
                   )}
@@ -131,10 +117,10 @@ export function HowItWorksSection() {
               </div>
 
               <h3 className="text-3xl lg:text-4xl font-display mb-2">{step.title}</h3>
-              <span className="text-xl text-white/40 font-display block mb-6">{step.subtitle}</span>
+              <span className="text-xl text-foreground/40 font-display block mb-6">{step.subtitle}</span>
 
               <p
-                className={`text-white/60 leading-relaxed transition-opacity duration-300 ${
+                className={`text-foreground/60 leading-relaxed transition-opacity duration-300 ${
                   activeStep === index ? "opacity-100" : "opacity-60"
                 }`}
               >
