@@ -36,17 +36,24 @@ function SignInForm() {
       let userId: string;
 
       if (mode === "signup") {
-        await supabase.auth.signUp({
+        const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: { data: { full_name: name } },
         });
+        if (signUpError) throw signUpError;
 
-        // Sign in regardless (handles both new and existing users)
-        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-        if (signInError) throw signInError;
-        access_token = data.session.access_token;
-        userId       = data.session.user.id;
+        // If session returned directly (confirm email OFF), use it
+        if (signUpData.session) {
+          access_token = signUpData.session.access_token;
+          userId       = signUpData.session.user.id;
+        } else {
+          // Fallback: sign in manually
+          const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInError) throw signInError;
+          access_token = data.session.access_token;
+          userId       = data.session.user.id;
+        }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
