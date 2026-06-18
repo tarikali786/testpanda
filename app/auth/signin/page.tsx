@@ -1,15 +1,21 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense, useEffect } from "react";
 import { useAuth } from "@/components/providers/auth-provider";
 
 function SignInForm() {
   const searchParams  = useSearchParams();
   const callbackUrl   = searchParams.get("callbackUrl") ?? "/dashboard";
   const { user, signIn, loading } = useAuth();
+  const router = useRouter();
 
-  // Already logged in — the auth provider will redirect, just show a spinner
+  useEffect(() => {
+    if (!loading && user) {
+      router.push(callbackUrl);
+    }
+  }, [user, loading, router, callbackUrl]);
+
   if (!loading && user) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">

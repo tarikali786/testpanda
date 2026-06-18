@@ -21,12 +21,18 @@ export async function middleware(req: NextRequest) {
     }
   );
 
+  // Refresh session — must use getUser() not getSession()
   const { data: { user } } = await supabase.auth.getUser();
 
   if (req.nextUrl.pathname.startsWith("/dashboard") && !user) {
     const signInUrl = new URL("/auth/signin", req.nextUrl.origin);
     signInUrl.searchParams.set("callbackUrl", req.nextUrl.href);
-    return NextResponse.redirect(signInUrl);
+    const redirectRes = NextResponse.redirect(signInUrl);
+    // Forward cookies to redirect response too
+    supabaseResponse.cookies.getAll().forEach((cookie) => {
+      redirectRes.cookies.set(cookie.name, cookie.value);
+    });
+    return redirectRes;
   }
 
   return supabaseResponse;
