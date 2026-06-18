@@ -50,7 +50,8 @@ export async function POST(req: NextRequest) {
 
     return response;
   } catch (error) {
-    console.error("Session creation error:", error);
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("Session creation error:", msg);
+    return NextResponse.json({ error: "Unauthorized", detail: msg }, { status: 401 });
   }
 }

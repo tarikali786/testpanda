@@ -59,7 +59,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
           if (res.ok && redirectTo) router.push(redirectTo);
           else if (res.ok && window.location.pathname === "/auth/signin") router.push("/dashboard");
-          else if (!res.ok) console.error("Session creation failed");
+          else if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            console.error("Session creation failed:", errData);
+          }
         } catch (err) {
           console.error("Session error:", err);
         }
