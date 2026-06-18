@@ -1,12 +1,11 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Suspense } from "react";
 
 function CallbackHandler() {
-  const router      = useRouter();
+  const router       = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -14,23 +13,24 @@ function CallbackHandler() {
     const next     = searchParams.get("next") ?? "/dashboard";
     const code     = searchParams.get("code");
 
-    if (!code) {
-      router.push("/auth/signin?error=missing_code");
-      return;
-    }
+    if (!code) { router.push("/auth/signin?error=missing_code"); return; }
 
     supabase.auth.exchangeCodeForSession(code).then(async ({ data, error }) => {
-      if (error || !data.session) {
-        router.push("/auth/signin?error=auth_failed");
-        return;
-      }
+      if (error || !data.session) { router.push("/auth/signin?error=auth_failed"); return; }
 
-      // Create user + trial record on first sign-in
-      await fetch("/api/auth/setup", {
-        method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ userId: data.session.user.id }),
-      });
+      // Set our own session cookie + create user record
+      await Promise.all([
+        fetch("/api/auth/session", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ access_token: data.session.access_token }),
+        }),
+        fetch("/api/auth/setup", {
+          method:  "POST",
+          headers: { "Content-Type": "application/json" },
+          body:    JSON.stringify({ userId: data.session.user.id }),
+        }),
+      ]);
 
       router.push(next);
     });
@@ -47,9 +47,5 @@ function CallbackHandler() {
 }
 
 export default function CallbackPage() {
-  return (
-    <Suspense>
-      <CallbackHandler />
-    </Suspense>
-  );
+  return <Suspense><CallbackHandler /></Suspense>;
 }

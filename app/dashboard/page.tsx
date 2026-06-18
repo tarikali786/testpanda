@@ -1,5 +1,6 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { getAdminClient } from "@/lib/supabase/admin";
 import { getUser, getTrial, getTrialDaysLeft, getUserSubscriptions } from "@/lib/supabase/db";
 import { BookOpen, Clock, ArrowRight, CheckCircle } from "lucide-react";
 
@@ -13,16 +14,24 @@ const courses = [
 ];
 
 export default async function DashboardPage() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const token = cookieStore.get("session")?.value;
+  if (!token) redirect("/auth/signin");
 
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) redirect("/auth/signin");
-  const authUser = session.user;
+  const admin = getAdminClient();
+  let uid: string;
+  try {
+    const { data: { user: authUser }, error } = await admin.auth.getUser(token);
+    if (error || !authUser) redirect("/auth/signin");
+    uid = authUser!.id;
+  } catch {
+    redirect("/auth/signin");
+  }
 
   const [user, trial, subscriptions] = await Promise.all([
-    getUser(supabase, authUser.id),
-    getTrial(supabase, authUser.id),
-    getUserSubscriptions(supabase, authUser.id),
+    getUser(admin, uid),
+    getTrial(admin, uid),
+    getUserSubscriptions(admin, uid),
   ]);
 
   if (!user) redirect("/auth/signin");
