@@ -43,9 +43,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (firebaseUser) {
         try {
-          const idToken     = await firebaseUser.getIdToken();
-          const callbackUrl = sessionStorage.getItem("authCallbackUrl");
-          if (callbackUrl) sessionStorage.removeItem("authCallbackUrl");
+          const idToken          = await firebaseUser.getIdToken();
+          const storedCallback   = sessionStorage.getItem("authCallbackUrl");
+          if (storedCallback) sessionStorage.removeItem("authCallbackUrl");
+
+          // Also check URL params — set by middleware when session cookie is missing
+          const urlCallback = new URLSearchParams(window.location.search).get("callbackUrl");
+          const redirectTo  = storedCallback || urlCallback || null;
 
           const res = await fetch("/api/auth/session", {
             method:  "POST",
@@ -53,7 +57,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             body:    JSON.stringify({ idToken }),
           });
 
-          if (res.ok && callbackUrl) router.push(callbackUrl);
+          if (res.ok && redirectTo) router.push(redirectTo);
+          else if (res.ok && window.location.pathname === "/auth/signin") router.push("/dashboard");
           else if (!res.ok) console.error("Session creation failed");
         } catch (err) {
           console.error("Session error:", err);

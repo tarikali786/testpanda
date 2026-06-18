@@ -78,12 +78,12 @@ export function CoursesSection() {
         }`}
       >
         {/* Left: course image */}
-        <div className="relative w-full lg:w-[45%] h-[320px] lg:h-[480px] shrink-0 overflow-hidden">
+        <div className="relative w-full lg:w-[45%] self-stretch min-h-[320px] shrink-0 overflow-hidden">
           <img
             src="/images/course.png"
             alt=""
             aria-hidden="true"
-            className="w-full h-full object-cover object-center"
+            className="absolute inset-0 w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-background" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-transparent to-background/30" />

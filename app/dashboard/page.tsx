@@ -57,7 +57,7 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
-      <header className=" sticky top-0 left-0 bg-black z-50 border-b border-foreground/10 py-2 px-6 lg:px-12  h-22 flex items-center justify-between">
+      <header className="sticky top-0 left-0 bg-background/95 backdrop-blur-xl z-50 border-b border-foreground/10 py-2 px-6 lg:px-12 h-22 flex items-center justify-between">
         <a href="/" className="text-xl font-display">
           {" "}
           <a href="/" className="flex items-center gap-2">
