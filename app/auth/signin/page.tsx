@@ -36,14 +36,13 @@ function SignInForm() {
       let userId: string;
 
       if (mode === "signup") {
-        const { error: signUpError } = await supabase.auth.signUp({
+        await supabase.auth.signUp({
           email,
           password,
           options: { data: { full_name: name } },
         });
-        if (signUpError) throw signUpError;
 
-        // Sign in immediately after signup
+        // Sign in regardless (handles both new and existing users)
         const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
         if (signInError) throw signInError;
         access_token = data.session.access_token;
