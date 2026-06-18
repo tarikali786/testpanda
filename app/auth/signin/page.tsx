@@ -36,17 +36,16 @@ function SignInForm() {
       let userId: string;
 
       if (mode === "signup") {
-        const { data, error } = await supabase.auth.signUp({
+        const { error: signUpError } = await supabase.auth.signUp({
           email,
           password,
           options: { data: { full_name: name } },
         });
-        if (error) throw error;
-        if (!data.session) {
-          setError("Check your email to confirm your account.");
-          setLoading(false);
-          return;
-        }
+        if (signUpError) throw signUpError;
+
+        // Sign in immediately after signup
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+        if (signInError) throw signInError;
         access_token = data.session.access_token;
         userId       = data.session.user.id;
       } else {
