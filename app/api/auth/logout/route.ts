@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 export async function POST(req: NextRequest) {
   const response = NextResponse.redirect(new URL("/", req.nextUrl.origin));
   response.cookies.set("session", "", {

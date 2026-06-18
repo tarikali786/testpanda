@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { adminAuth } from "@/lib/firebase/admin";
+
+export const runtime = "nodejs";
 import { getUser, createUser, getTrial, createTrial } from "@/lib/firebase/db";
 
 const SESSION_DURATION_MS = 60 * 60 * 24 * 14 * 1000; // 14 days
