@@ -7,6 +7,7 @@ export type DbUser = {
   photo_url: string;
   created_at: string;
   role: string;
+  is_verified: boolean;
 };
 
 export type Trial = {
@@ -35,9 +36,13 @@ export async function getUser(supabase: SupabaseClient, uid: string): Promise<Db
 
 export async function createUser(
   supabase: SupabaseClient,
-  user: { uid: string; email: string; name: string; photo_url: string }
+  user: { uid: string; email: string; name: string; photo_url: string; is_verified?: boolean }
 ): Promise<void> {
   await supabase.from("users").insert(user);
+}
+
+export async function setUserVerified(supabase: SupabaseClient, uid: string): Promise<void> {
+  await supabase.from("users").update({ is_verified: true }).eq("uid", uid);
 }
 
 export async function getTrial(supabase: SupabaseClient, uid: string): Promise<Trial | null> {

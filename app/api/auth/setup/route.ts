@@ -19,10 +19,11 @@ export async function POST(req: NextRequest) {
 
     if (!existingUser) {
       await admin.from("users").insert({
-        uid:       user.id,
-        email:     user.email ?? "",
-        name:      user.user_metadata?.full_name ?? "",
-        photo_url: user.user_metadata?.avatar_url ?? "",
+        uid:         user.id,
+        email:       user.email ?? "",
+        name:        user.user_metadata?.full_name ?? "",
+        photo_url:   user.user_metadata?.avatar_url ?? "",
+        is_verified: !!user.email_confirmed_at,
       });
 
       const expiresAt = new Date();
@@ -31,6 +32,11 @@ export async function POST(req: NextRequest) {
         user_id:    user.id,
         expires_at: expiresAt.toISOString(),
       });
+    }
+
+    // Update is_verified if email was just confirmed
+    if (existingUser && user.email_confirmed_at) {
+      await admin.from("users").update({ is_verified: true }).eq("uid", user.id);
     }
 
     return NextResponse.json({ success: true });
