@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const courses = [
   {
@@ -62,7 +64,10 @@ const courses = [
 
 export function CoursesSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [loadingCourse, setLoadingCourse] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const { isSignedIn } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -72,6 +77,19 @@ export function CoursesSection() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  async function handleBuy(slug: string) {
+    if (!isSignedIn) { router.push("/sign-in"); return; }
+    setLoadingCourse(slug);
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ course: slug }),
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else setLoadingCourse(null);
+  }
 
   return (
     <section id="courses" ref={sectionRef} className="relative bg-background">
@@ -179,15 +197,23 @@ export function CoursesSection() {
               </div>
 
               {/* CTA */}
-              <div className="mt-auto">
+              <div className="mt-auto flex items-center justify-between">
                 <a
                   href="#pricing"
                   className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
                   style={{ color: course.color }}
                 >
-                  Get Started
+                  View Plans
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </a>
+                <button
+                  onClick={() => handleBuy(course.slug)}
+                  disabled={loadingCourse === course.slug}
+                  className="inline-flex items-center gap-1.5 text-xs font-medium px-4 py-2 text-white disabled:opacity-60 disabled:cursor-not-allowed transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: course.color }}
+                >
+                  {loadingCourse === course.slug ? "..." : `Buy $${course.price}`}
+                </button>
               </div>
             </div>
           ))}

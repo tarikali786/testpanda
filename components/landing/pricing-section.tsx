@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Check, ArrowRight, Zap } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 
 const plans = [
   {
@@ -9,6 +11,7 @@ const plans = [
     desc:      "Try before you buy",
     price:     "$0",
     period:    "30 days",
+    planKey:   null,
     features:  [
       "All 6 courses unlocked",
       "Demo exam papers",
@@ -23,6 +26,7 @@ const plans = [
     desc:      "One course, full access",
     price:     "$49",
     period:    "AUD / 12 months",
+    planKey:   "single",
     features:  [
       "1 course of your choice",
       "Full exam paper library",
@@ -37,6 +41,7 @@ const plans = [
     desc:      "Best value for most families",
     price:     "$99",
     period:    "AUD / 12 months",
+    planKey:   "bundle",
     features:  [
       "3 courses of your choice",
       "Full exam paper library",
@@ -52,6 +57,7 @@ const plans = [
     desc:      "Every course, maximum prep",
     price:     "$149",
     period:    "AUD / 12 months",
+    planKey:   "all_access",
     features:  [
       "All 6 courses",
       "Full exam paper library",
@@ -67,7 +73,10 @@ const plans = [
 
 export function PricingSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
+  const { isSignedIn } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -77,6 +86,26 @@ export function PricingSection() {
     if (sectionRef.current) observer.observe(sectionRef.current);
     return () => observer.disconnect();
   }, []);
+
+  async function handlePlanClick(planKey: string | null) {
+    if (!planKey) {
+      router.push(isSignedIn ? "/dashboard" : "/sign-in");
+      return;
+    }
+    if (!isSignedIn) {
+      router.push("/sign-in");
+      return;
+    }
+    setLoadingPlan(planKey);
+    const res = await fetch("/api/stripe/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plan: planKey }),
+    });
+    const data = await res.json();
+    if (data.url) window.location.href = data.url;
+    else setLoadingPlan(null);
+  }
 
   return (
     <section id="pricing" ref={sectionRef} className="relative py-10 bg-background">
@@ -158,13 +187,15 @@ export function PricingSection() {
                   </ul>
 
                   <button
-                    className={`w-full py-4 flex items-center justify-center gap-2 text-sm font-medium transition-all group ${
+                    onClick={() => handlePlanClick(plan.planKey)}
+                    disabled={loadingPlan === plan.planKey}
+                    className={`w-full py-4 flex items-center justify-center gap-2 text-sm font-medium transition-all group disabled:opacity-60 disabled:cursor-not-allowed ${
                       plan.highlight
                         ? "bg-white text-purple-700 hover:bg-white/90 font-semibold"
                         : "border border-foreground/20 text-foreground hover:border-foreground hover:bg-foreground/5"
                     }`}
                   >
-                    {plan.cta}
+                    {loadingPlan === plan.planKey ? "Redirecting..." : plan.cta}
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                   </button>
                 </div>

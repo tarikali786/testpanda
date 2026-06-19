@@ -1,0 +1,38 @@
+create table users                                                                                                                                                        (
+    id text primary key,                                                                                                                                                  
+    email text unique not null,
+    name text,
+    photo_url text,
+    role text default 'user',
+    is_verified boolean default false,    created_at timestamptz default now()
+  );                                                                                                                                                                      
+  
+  create table trials
+  (
+    id uuid primary key default gen_random_uuid(),
+    user_id text references users(id) on delete cascade,
+    started_at timestamptz default now(),    expires_at timestamptz not null,
+    is_active boolean default true                                                                                                                                        
+  );
+
+  create table subscriptions
+  (
+    id uuid primary key default gen_random_uuid(),
+    user_id text references users(id) on delete cascade,
+    course_id text not null,    stripe_session_id text,
+    amount numeric,                                                                                                                                                       
+    purchased_at timestamptz default now(),
+    valid_until timestamptz not null,
+    drive_access_granted boolean default false
+  );  
+  alter table users enable row level security;                                                                                                                            
+  alter table trials enable row level security;
+  alter table subscriptions enable row level security;
+
+  create policy "users: own data" on users for all using (id = auth.uid()::text);
+  create policy "trials: own data" on trials for all using (user_id = auth.uid()::text);
+  create policy "subscriptions: own data" on subscriptions for all using (user_id = auth.uid()::text);  
+
+  create table test_table (                                                                                                                                               
+    id text primary key
+  );
