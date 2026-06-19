@@ -93,7 +93,7 @@ export function PricingSection() {
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
             >
-              Invest in
+              <span style={{background: "linear-gradient(135deg, #7c3aed, #a855f7, #ec4899)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"}}>Invest in</span>
               <br />
               <span className="text-stroke">results.</span>
             </h2>
@@ -115,16 +115,19 @@ export function PricingSection() {
             {plans.map((plan, index) => (
               <div
                 key={plan.name}
-                className={`relative bg-background border transition-all duration-700 ${
+                className={`relative border transition-all duration-700 ${
                   plan.highlight
-                    ? "border-foreground lg:-mx-2 lg:z-10 lg:scale-105"
-                    : "border-foreground/10 lg:first:-mr-2 lg:last:-ml-2"
+                    ? "border-0 lg:-mx-2 lg:z-10 lg:scale-105"
+                    : "bg-background border-foreground/10 lg:first:-mr-2 lg:last:-ml-2"
                 } ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"}`}
-                style={{ transitionDelay: `${index * 100}ms` }}
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                  ...(plan.highlight ? {background: "linear-gradient(160deg, #7c3aed 0%, #a855f7 50%, #ec4899 100%)"} : {}),
+                }}
               >
                 {plan.highlight && (
                   <div className="absolute -top-4 left-8 right-8 flex justify-center">
-                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-foreground text-background text-xs font-mono uppercase tracking-widest">
+                    <span className="inline-flex items-center gap-2 px-4 py-2 text-white text-xs font-mono uppercase tracking-widest" style={{background: "linear-gradient(135deg, #6d28d9, #a21caf)"}}>
                       <Zap className="w-3 h-3" />
                       Most Popular
                     </span>
@@ -132,24 +135,24 @@ export function PricingSection() {
                 )}
 
                 <div className="p-8 lg:p-10">
-                  <div className="mb-8 pb-8 border-b border-foreground/10">
-                    <span className="font-mono text-xs text-muted-foreground">
+                  <div className={`mb-8 pb-8 border-b ${plan.highlight ? "border-white/20" : "border-foreground/10"}`}>
+                    <span className={`font-mono text-xs ${plan.highlight ? "text-white/60" : "text-muted-foreground"}`}>
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="text-2xl lg:text-3xl font-display mt-2">{plan.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-2">{plan.desc}</p>
+                    <h3 className={`text-2xl lg:text-3xl font-display mt-2 ${plan.highlight ? "text-white" : ""}`}>{plan.name}</h3>
+                    <p className={`text-sm mt-2 ${plan.highlight ? "text-white/70" : "text-muted-foreground"}`}>{plan.desc}</p>
                   </div>
 
                   <div className="mb-8">
-                    <span className="text-5xl lg:text-6xl font-display">{plan.price}</span>
-                    <p className="text-xs text-muted-foreground mt-2 font-mono">{plan.period}</p>
+                    <span className={`text-5xl lg:text-6xl font-display ${plan.highlight ? "text-white" : ""}`}>{plan.price}</span>
+                    <p className={`text-xs mt-2 font-mono ${plan.highlight ? "text-white/60" : "text-muted-foreground"}`}>{plan.period}</p>
                   </div>
 
                   <ul className="space-y-3 mb-10">
                     {plan.features.map((feature) => (
                       <li key={feature} className="flex items-start gap-3">
-                        <Check className="w-4 h-4 text-[#eca8d6] mt-0.5 shrink-0" />
-                        <span className="text-sm text-muted-foreground">{feature}</span>
+                        <Check className={`w-4 h-4 mt-0.5 shrink-0 ${plan.highlight ? "text-white" : "text-[#eca8d6]"}`} />
+                        <span className={`text-sm ${plan.highlight ? "text-white/80" : "text-muted-foreground"}`}>{feature}</span>
                       </li>
                     ))}
                   </ul>
@@ -157,7 +160,7 @@ export function PricingSection() {
                   <button
                     className={`w-full py-4 flex items-center justify-center gap-2 text-sm font-medium transition-all group ${
                       plan.highlight
-                        ? "bg-foreground text-background hover:bg-foreground/90"
+                        ? "bg-white text-purple-700 hover:bg-white/90 font-semibold"
                         : "border border-foreground/20 text-foreground hover:border-foreground hover:bg-foreground/5"
                     }`}
                   >

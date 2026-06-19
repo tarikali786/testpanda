@@ -33,7 +33,8 @@ const socialLinks = [
 export function FooterSection() {
   return (
     <footer className="relative bg-secondary">
-    
+      {/* Colorful gradient top bar */}
+      <div className="h-1 w-full" style={{background: "linear-gradient(90deg, #a78bfa, #eca8d6, #60a5fa, #34d399, #fbbf24, #f472b6, #a78bfa)"}} />
 
       {/* Footer content */}
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">

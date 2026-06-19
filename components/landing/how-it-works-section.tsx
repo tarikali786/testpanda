@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+const stepColors = ["#a78bfa", "#60a5fa", "#34d399"];
+
 const steps = [
   {
     number:    "01",
@@ -54,7 +56,8 @@ export function HowItWorksSection() {
     <section
       id="how-it-works"
       ref={sectionRef}
-      className="relative py-10  text-foreground overflow-hidden"
+      className="relative py-10 text-foreground overflow-hidden"
+      style={{background: "linear-gradient(135deg, #f5f3ff 0%, #ffffff 40%, #f0f9ff 100%)"}}
     >
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
@@ -78,9 +81,9 @@ export function HowItWorksSection() {
                 isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
               }`}
             >
-              <span className="block">Simple.</span>
-              <span className="block text-foreground/80">Fast.</span>
-              <span className="block text-foreground/50">Effective.</span>
+              <span className="block" style={{color: stepColors[0]}}>Simple.</span>
+              <span className="block" style={{color: stepColors[1]}}>Fast.</span>
+              <span className="block" style={{color: stepColors[2]}}>Effective.</span>
             </h2>
           </div>
 
@@ -94,24 +97,23 @@ export function HowItWorksSection() {
               key={step.number}
               type="button"
               onClick={() => setActiveStep(index)}
-              className={`relative text-left p-8 lg:p-12 border transition-all duration-500 ${
-                activeStep === index
-                  ? "bg-background border-foreground/60"
-                  : "bg-background border-foreground/25 hover:border-foreground/50"
-              }`}
+              className="relative text-left p-8 lg:p-12 border transition-all duration-500"
+              style={{
+                backgroundColor: activeStep === index ? `${stepColors[index]}12` : "white",
+                borderColor: activeStep === index ? `${stepColors[index]}80` : "rgba(0,0,0,0.12)",
+              }}
             >
               {/* Step number with progress line */}
               <div className="flex items-center gap-4 mb-8">
                 <span
-                  className={`text-4xl font-display transition-colors duration-300 ${
-                    activeStep === index ? "text-[#eca8d6]" : "text-foreground/20"
-                  }`}
+                  className="text-4xl font-display transition-colors duration-300"
+                  style={{ color: activeStep === index ? stepColors[index] : "rgba(0,0,0,0.15)" }}
                 >
                   {step.number}
                 </span>
                 <div className="flex-1 h-px bg-foreground/10 overflow-hidden">
                   {activeStep === index && (
-                    <div className="h-full bg-[#eca8d6]/50 animate-progress" />
+                    <div className="h-full animate-progress" style={{backgroundColor: `${stepColors[index]}70`}} />
                   )}
                 </div>
               </div>
@@ -129,18 +131,20 @@ export function HowItWorksSection() {
 
               <div
                 className={`mt-6 inline-flex items-center gap-2 text-xs font-mono transition-all duration-300 ${
-                  activeStep === index ? "text-[#eca8d6] opacity-100" : "opacity-0"
+                  activeStep === index ? "opacity-100" : "opacity-0"
                 }`}
+                style={{ color: stepColors[index] }}
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-[#eca8d6]" />
+                <span className="w-1.5 h-1.5 rounded-full" style={{backgroundColor: stepColors[index]}} />
                 {step.highlight}
               </div>
 
               {/* Active bottom bar */}
               <div
-                className={`absolute bottom-0 left-0 right-0 h-1 bg-[#eca8d6] transition-transform duration-500 origin-left ${
+                className={`absolute bottom-0 left-0 right-0 h-1 transition-transform duration-500 origin-left ${
                   activeStep === index ? "scale-x-100" : "scale-x-0"
                 }`}
+                style={{backgroundColor: stepColors[index]}}
               />
             </button>
           ))}

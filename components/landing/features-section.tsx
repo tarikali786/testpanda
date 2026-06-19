@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { FileText, TrendingUp, Timer, Smartphone, Gift, FolderOpen } from "lucide-react";
 
+const featureColors = ["#eca8d6", "#a78bfa", "#60a5fa", "#34d399", "#fbbf24", "#818cf8"];
+
 const features = [
   {
     number: "01",
@@ -123,7 +125,15 @@ function ParticleVisualization() {
 
         ctx.beginPath();
         ctx.arc(x, y, p.radius + pulse * 0.8, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+        const colorPalette = [
+          `rgba(167,139,250,${alpha})`,
+          `rgba(236,168,214,${alpha})`,
+          `rgba(96,165,250,${alpha})`,
+          `rgba(52,211,153,${alpha})`,
+          `rgba(251,191,36,${alpha})`,
+          `rgba(129,140,248,${alpha})`,
+        ];
+        ctx.fillStyle = colorPalette[Math.floor(p.phase * 10) % colorPalette.length];
         ctx.fill();
       });
 
@@ -177,7 +187,7 @@ export function FeaturesSection() {
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
               >
-                Everything
+                <span style={{background: "linear-gradient(135deg, #eca8d6, #a78bfa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"}}>Everything</span>
                 <br />
                 <span className="text-muted-foreground">they need.</span>
               </h2>
@@ -196,9 +206,10 @@ export function FeaturesSection() {
 
         {/* Large feature card — particles + image */}
         <div
-          className={`lg:col-span-12 relative  border border-foreground/10 min-h-[500px] overflow-hidden group transition-all duration-700 flex mb-4 ${
+          className={`lg:col-span-12 relative border border-foreground/10 min-h-[500px] overflow-hidden group transition-all duration-700 flex mb-4 ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
+          style={{background: "linear-gradient(135deg, #fdf4ff 0%, #f5f3ff 50%, #eff6ff 100%)"}}
         >
           {/* Left: text */}
           <div className="relative flex-1 p-8 lg:p-12 ">
@@ -236,17 +247,22 @@ export function FeaturesSection() {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.slice(1, 5).map((feature, index) => {
             const Icon = feature.icon;
+            const color = featureColors[index + 1];
             return (
               <div
                 key={feature.title}
-                className={`group p-8 bg-background border border-foreground/10 hover:border-foreground/30 transition-all duration-700 ${
+                className={`group p-8 border transition-all duration-700 ${
                   isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 }`}
-                style={{ transitionDelay: `${(index + 1) * 80}ms` }}
+                style={{
+                  transitionDelay: `${(index + 1) * 80}ms`,
+                  background: `linear-gradient(135deg, ${color}12 0%, white 60%)`,
+                  borderColor: `${color}30`,
+                }}
               >
                 <span className="font-mono text-sm text-muted-foreground">{feature.number}</span>
-                <div className="mt-4 mb-4">
-                  <Icon className="w-5 h-5 text-[#eca8d6]" />
+                <div className="mt-4 mb-4 w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: `${color}20`}}>
+                  <Icon className="w-5 h-5" style={{color}} />
                 </div>
                 <h3 className="text-xl font-display mb-3 group-hover:translate-x-1 transition-transform duration-300">
                   {feature.title}
@@ -259,10 +275,10 @@ export function FeaturesSection() {
 
         {/* Last large card */}
         <div
-          className={`mt-4 relative  border border-foreground/10 min-h-[300px] overflow-hidden group transition-all duration-700 flex ${
+          className={`mt-4 relative border border-foreground/10 min-h-[300px] overflow-hidden group transition-all duration-700 flex ${
             isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-12"
           }`}
-          style={{ transitionDelay: "500ms" }}
+          style={{ transitionDelay: "500ms", background: "linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%)" }}
         >
           <div className="relative flex-1 p-8 lg:p-12">
             <span className="font-mono text-sm text-muted-foreground">{features[5].number}</span>

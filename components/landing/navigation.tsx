@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Menu, X, LogOut, LayoutDashboard } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/components/providers/auth-provider";
 
 const navLinks = [
   { name: "Courses", href: "#courses" },
@@ -15,7 +14,6 @@ const navLinks = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { user, loading, signIn, signOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -60,50 +58,19 @@ export function Navigation() {
             ))}
           </div>
 
-          {/* Desktop CTAs */}
+          {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            {loading ? (
-              <div className="w-24 h-8 bg-foreground/10 rounded-full animate-pulse" />
-            ) : user ? (
-              <div className="flex items-center gap-3">
-                <a
-                  href="/dashboard"
-                  className="flex items-center gap-2 text-sm transition-colors text-foreground/70 hover:text-foreground"
-                >
-                  <LayoutDashboard className="w-4 h-4" />
-                  Dashboard
-                </a>
-                {user.user_metadata?.avatar_url && (
-                  <img src={user.user_metadata.avatar_url} alt={user.user_metadata?.full_name ?? ""} referrerPolicy="no-referrer" className="w-8 h-8 rounded-full border border-foreground/20" />
-                )}
-                <button
-                  onClick={signOut}
-                  className="flex items-center gap-1.5 text-sm transition-colors text-foreground/50 hover:text-foreground"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <>
-                <button
-                  onClick={() => signIn("/dashboard")}
-                  className="text-sm transition-colors duration-500 text-foreground/70 hover:text-foreground"
-                >
-                  Sign In
-                </button>
-                <Button
-                  size="sm"
-                  onClick={() => signIn("/dashboard")}
-                  className={`rounded-full transition-all duration-500 ${isScrolled
-                    ? "bg-foreground hover:bg-foreground/90 text-background px-4 h-8 text-xs"
-                    : "bg-foreground hover:bg-foreground/90 text-background px-6"
-                    }`}
-                >
-                  Start Free Trial
-                </Button>
-              </>
-            )}
+            <Button
+              size="sm"
+              asChild
+              className={`rounded-full transition-all duration-500 text-white ${isScrolled
+                ? "px-4 h-8 text-xs"
+                : "px-6"
+                }`}
+              style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+            >
+              <a href="#pricing">Get Started</a>
+            </Button>
           </div>
 
           {/* Mobile button */}
@@ -136,17 +103,6 @@ export function Navigation() {
                 {link.name}
               </a>
             ))}
-            {user && (
-              <a
-                href="/dashboard"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-5xl font-display text-foreground hover:text-muted-foreground transition-all duration-500 ${isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  }`}
-                style={{ transitionDelay: isMobileMenuOpen ? `${navLinks.length * 75}ms` : "0ms" }}
-              >
-                Dashboard
-              </a>
-            )}
           </div>
 
           <div
@@ -154,30 +110,14 @@ export function Navigation() {
               }`}
             style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
           >
-            {user ? (
-              <Button
-                className="flex-1 bg-foreground text-background rounded-full h-14 text-base"
-                onClick={() => { setIsMobileMenuOpen(false); signOut(); }}
-              >
-                Sign Out
-              </Button>
-            ) : (
-              <>
-                <Button
-                  variant="outline"
-                  className="flex-1 rounded-full h-14 text-base"
-                  onClick={() => { setIsMobileMenuOpen(false); signIn("/dashboard"); }}
-                >
-                  Sign In
-                </Button>
-                <Button
-                  className="flex-1 bg-foreground text-background rounded-full h-14 text-base"
-                  onClick={() => { setIsMobileMenuOpen(false); signIn("/dashboard"); }}
-                >
-                  Start Free Trial
-                </Button>
-              </>
-            )}
+            <Button
+              className="flex-1 rounded-full h-14 text-base text-white"
+              style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+              asChild
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <a href="#pricing">Get Started</a>
+            </Button>
           </div>
         </div>
       </div>

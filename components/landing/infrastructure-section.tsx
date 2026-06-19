@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
-import { useAuth } from "@/components/providers/auth-provider";
 
 const courses = [
   {
@@ -10,6 +9,7 @@ const courses = [
     name:     "NAPLAN",
     year:     "Year 3",
     color:    "#a78bfa",
+    price:    10,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Foundation exam preparation for Year 3 NAPLAN.",
   },
@@ -18,6 +18,7 @@ const courses = [
     name:     "OC",
     year:     "Year 4",
     color:    "#f472b6",
+    price:    15,
     subjects: ["Mathematical Reasoning", "Thinking Skills", "Reading"],
     desc:     "Opportunity Class placement test preparation.",
   },
@@ -26,6 +27,7 @@ const courses = [
     name:     "NAPLAN",
     year:     "Year 5",
     color:    "#34d399",
+    price:    20,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Comprehensive NAPLAN preparation for Year 5.",
   },
@@ -34,6 +36,7 @@ const courses = [
     name:     "Selective",
     year:     "Year 6",
     color:    "#60a5fa",
+    price:    25,
     subjects: ["Mathematical Reasoning", "Thinking Skills", "Reading", "Writing"],
     desc:     "Selective High School placement exam preparation.",
   },
@@ -42,6 +45,7 @@ const courses = [
     name:     "NAPLAN",
     year:     "Year 7",
     color:    "#fbbf24",
+    price:    30,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Advanced NAPLAN preparation for Year 7.",
   },
@@ -50,6 +54,7 @@ const courses = [
     name:     "NAPLAN",
     year:     "Year 9",
     color:    "#818cf8",
+    price:    35,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Senior NAPLAN preparation for Year 9 students.",
   },
@@ -58,7 +63,6 @@ const courses = [
 export function CoursesSection() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
-  const { user, signIn } = useAuth();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -100,7 +104,7 @@ export function CoursesSection() {
             Courses
           </span>
           <h2 className="text-6xl md:text-7xl lg:text-[96px] font-display tracking-tight leading-[0.9] mb-6">
-            6 Courses.
+            <span style={{background: "linear-gradient(135deg, #a78bfa, #60a5fa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"}}>6 Courses.</span>
             <br />
             <span className="text-muted-foreground">Every level.</span>
           </h2>
@@ -117,10 +121,14 @@ export function CoursesSection() {
           {courses.map((course, index) => (
             <div
               key={course.slug}
-              className={`group relative flex flex-col p-8 bg-background border border-foreground/10 hover:border-foreground/30 transition-all duration-500 hover:-translate-y-1 ${
+              className={`group relative flex flex-col p-8 border transition-all duration-500 hover:-translate-y-1 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
               }`}
-              style={{ transitionDelay: `${index * 80}ms` }}
+              style={{
+                transitionDelay: `${index * 80}ms`,
+                background: `linear-gradient(135deg, ${course.color}10 0%, white 55%)`,
+                borderColor: `${course.color}35`,
+              }}
             >
               {/* Color accent */}
               <div
@@ -147,7 +155,15 @@ export function CoursesSection() {
               <h3 className="text-2xl font-display text-foreground mb-2">
                 {course.name} | {course.year}
               </h3>
-              <p className="text-sm text-muted-foreground mb-5">{course.desc}</p>
+              <p className="text-sm text-muted-foreground mb-4">{course.desc}</p>
+
+              {/* Price */}
+              <div className="flex items-baseline gap-1 mb-5">
+                <span className="text-3xl font-display font-semibold" style={{ color: course.color }}>
+                  ${course.price}
+                </span>
+                <span className="text-xs text-muted-foreground">AUD / mo</span>
+              </div>
 
               {/* Subjects */}
               <div className="flex flex-wrap gap-2 mb-8">
@@ -164,25 +180,14 @@ export function CoursesSection() {
 
               {/* CTA */}
               <div className="mt-auto">
-                {user ? (
-                  <a
-                    href="/dashboard"
-                    className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
-                    style={{ color: course.color }}
-                  >
-                    Open Course
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </a>
-                ) : (
-                  <button
-                    onClick={() => signIn("/dashboard")}
-                    className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
-                    style={{ color: course.color }}
-                  >
-                    Start Free Trial
-                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                  </button>
-                )}
+                <a
+                  href="#pricing"
+                  className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
+                  style={{ color: course.color }}
+                >
+                  Get Started
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </a>
               </div>
             </div>
           ))}

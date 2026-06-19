@@ -44,7 +44,7 @@ export function TestimonialsSection() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative py-10 overflow-hidden">
+    <section ref={sectionRef} className="relative py-10 overflow-hidden" style={{background: "linear-gradient(135deg, #fdf4ff 0%, #ffffff 50%, #f0f9ff 100%)"}}>
       
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Header */}
@@ -58,7 +58,7 @@ export function TestimonialsSection() {
               isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             }`}
           >
-            Trusted by
+            <span style={{background: "linear-gradient(135deg, #f472b6, #eca8d6)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text"}}>Trusted by</span>
             <br />
             <span className="text-muted-foreground">families.</span>
           </h2>
@@ -69,10 +69,14 @@ export function TestimonialsSection() {
           {testimonials.map((t, index) => (
             <div
               key={t.name}
-              className={`flex flex-col p-8 bg-background border border-foreground/10 hover:border-foreground/25 transition-all duration-700 ${
+              className={`flex flex-col p-8 border transition-all duration-700 ${
                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
               }`}
-              style={{ transitionDelay: `${index * 100}ms` }}
+              style={{
+                transitionDelay: `${index * 100}ms`,
+                background: `linear-gradient(135deg, ${t.color}12 0%, white 55%)`,
+                borderColor: `${t.color}40`,
+              }}
             >
               {/* Stars */}
               <div className="flex gap-1 mb-6">

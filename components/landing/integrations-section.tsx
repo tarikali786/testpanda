@@ -45,7 +45,7 @@ export function FaqSection() {
   }, []);
 
   return (
-    <section id="faq" ref={sectionRef} className="relative  bg-background overflow-hidden">
+    <section id="faq" ref={sectionRef} className="relative overflow-hidden" style={{background: "linear-gradient(135deg, #fffbeb 0%, #ffffff 40%, #fdf4ff 100%)"}}>
      
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
@@ -89,12 +89,12 @@ export function FaqSection() {
                     onClick={() => setOpenIndex(openIndex === index ? null : index)}
                     className="w-full flex items-start justify-between gap-6 py-7 text-left group"
                   >
-                    <span className="font-medium text-foreground group-hover:text-muted-foreground transition-colors">
+                    <span className={`font-medium transition-colors ${openIndex === index ? "text-violet-600" : "text-foreground group-hover:text-muted-foreground"}`}>
                       {faq.q}
                     </span>
                     <ChevronDown
-                      className={`w-5 h-5 text-muted-foreground shrink-0 mt-0.5 transition-transform duration-300 ${
-                        openIndex === index ? "rotate-180" : ""
+                      className={`w-5 h-5 shrink-0 mt-0.5 transition-transform duration-300 ${
+                        openIndex === index ? "rotate-180 text-violet-500" : "text-muted-foreground"
                       }`}
                     />
                   </button>
@@ -104,7 +104,9 @@ export function FaqSection() {
                       openIndex === index ? "max-h-96 pb-7" : "max-h-0"
                     }`}
                   >
-                    <p className="text-muted-foreground leading-relaxed text-sm">{faq.a}</p>
+                    <div className="border-l-2 border-violet-400 pl-4">
+                      <p className="text-muted-foreground leading-relaxed text-sm">{faq.a}</p>
+                    </div>
                   </div>
                 </div>
               ))}
