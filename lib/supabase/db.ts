@@ -1,7 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type DbUser = {
-  uid: string;
+  id: string;
   email: string;
   name: string;
   photo_url: string;
@@ -29,31 +29,31 @@ export type Subscription = {
   drive_access_granted: boolean;
 };
 
-export async function getUser(supabase: SupabaseClient, uid: string): Promise<DbUser | null> {
-  const { data } = await supabase.from("users").select("*").eq("uid", uid).single();
+export async function getUser(supabase: SupabaseClient, id: string): Promise<DbUser | null> {
+  const { data } = await supabase.from("users").select("*").eq("id", id).single();
   return data ?? null;
 }
 
 export async function createUser(
   supabase: SupabaseClient,
-  user: { uid: string; email: string; name: string; photo_url: string; is_verified?: boolean }
+  user: { id: string; email: string; name: string; photo_url: string; is_verified?: boolean }
 ): Promise<void> {
   await supabase.from("users").insert(user);
 }
 
-export async function setUserVerified(supabase: SupabaseClient, uid: string): Promise<void> {
-  await supabase.from("users").update({ is_verified: true }).eq("uid", uid);
+export async function setUserVerified(supabase: SupabaseClient, id: string): Promise<void> {
+  await supabase.from("users").update({ is_verified: true }).eq("id", id);
 }
 
-export async function getTrial(supabase: SupabaseClient, uid: string): Promise<Trial | null> {
-  const { data } = await supabase.from("trials").select("*").eq("user_id", uid).single();
+export async function getTrial(supabase: SupabaseClient, id: string): Promise<Trial | null> {
+  const { data } = await supabase.from("trials").select("*").eq("user_id", id).single();
   return data ?? null;
 }
 
-export async function createTrial(supabase: SupabaseClient, uid: string): Promise<void> {
+export async function createTrial(supabase: SupabaseClient, id: string): Promise<void> {
   const expiresAt = new Date();
   expiresAt.setDate(expiresAt.getDate() + 30);
-  await supabase.from("trials").insert({ user_id: uid, expires_at: expiresAt.toISOString() });
+  await supabase.from("trials").insert({ user_id: id, expires_at: expiresAt.toISOString() });
 }
 
 export function getTrialDaysLeft(trial: Trial): number {
@@ -61,7 +61,7 @@ export function getTrialDaysLeft(trial: Trial): number {
   return Math.max(0, Math.ceil(diff / (1000 * 60 * 60 * 24)));
 }
 
-export async function getUserSubscriptions(supabase: SupabaseClient, uid: string): Promise<Subscription[]> {
-  const { data } = await supabase.from("subscriptions").select("*").eq("user_id", uid);
+export async function getUserSubscriptions(supabase: SupabaseClient, id: string): Promise<Subscription[]> {
+  const { data } = await supabase.from("subscriptions").select("*").eq("user_id", id);
   return data ?? [];
 }

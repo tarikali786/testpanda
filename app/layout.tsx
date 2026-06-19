@@ -23,6 +23,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "TestPanda — Australia's Smartest Exam Prep Platform",
   description: 'Prepare for NAPLAN, OC & Selective High School exams with confidence. Expert practice papers, timed tests, and study materials for Years 3–9. Start your 30-day free trial today.',
+  icons: {
+    icon: '/logo.ico',
+  },
 }
 
 export default function RootLayout({
