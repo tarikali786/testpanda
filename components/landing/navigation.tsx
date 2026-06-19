@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useUser, UserButton } from "@clerk/nextjs";
 
 const navLinks = [
   { name: "Courses", href: "#courses" },
@@ -14,6 +15,7 @@ const navLinks = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -60,17 +62,28 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Button
-              size="sm"
-              asChild
-              className={`rounded-full transition-all duration-500 text-white ${isScrolled
-                ? "px-4 h-8 text-xs"
-                : "px-6"
-                }`}
-              style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
-            >
-              <a href="#pricing">Get Started</a>
-            </Button>
+            {isSignedIn ? (
+              <>
+                <a href="/dashboard" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
+                  Dashboard
+                </a>
+                <UserButton afterSignOutUrl="/" />
+              </>
+            ) : (
+              <>
+                <a href="/sign-in" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
+                  Sign In
+                </a>
+                <Button
+                  size="sm"
+                  asChild
+                  className={`rounded-full transition-all duration-500 text-white ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
+                  style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+                >
+                  <a href="#pricing">Get Started</a>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile button */}
@@ -106,18 +119,37 @@ export function Navigation() {
           </div>
 
           <div
-            className={`flex gap-4 pt-8 border-t border-foreground/10 transition-all duration-500 ${isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-              }`}
+            className={`flex gap-4 pt-8 border-t border-foreground/10 transition-all duration-500 ${isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
             style={{ transitionDelay: isMobileMenuOpen ? "300ms" : "0ms" }}
           >
-            <Button
-              className="flex-1 rounded-full h-14 text-base text-white"
-              style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
-              asChild
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <a href="#pricing">Get Started</a>
-            </Button>
+            {isSignedIn ? (
+              <Button
+                className="flex-1 rounded-full h-14 text-base text-white"
+                style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+                asChild
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <a href="/dashboard">Go to Dashboard</a>
+              </Button>
+            ) : (
+              <>
+                <Button
+                  className="flex-1 rounded-full h-14 text-base border border-foreground/20 bg-transparent text-foreground hover:bg-foreground/5"
+                  asChild
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <a href="/sign-in">Sign In</a>
+                </Button>
+                <Button
+                  className="flex-1 rounded-full h-14 text-base text-white"
+                  style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+                  asChild
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <a href="#pricing">Get Started</a>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const benefits = [
   "30-day free trial",
@@ -13,6 +14,7 @@ const benefits = [
 export function CtaSection() {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -70,10 +72,10 @@ export function CtaSection() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href="#pricing"
+              href={isSignedIn ? "/dashboard" : "/sign-in"}
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-purple-700 rounded-full font-semibold hover:bg-white/90 transition-colors"
             >
-              Start Free Trial — No Credit Card
+              {isSignedIn ? "Go to Dashboard" : "Start Free Trial — No Credit Card"}
               <ArrowRight className="w-4 h-4" />
             </a>
             <a

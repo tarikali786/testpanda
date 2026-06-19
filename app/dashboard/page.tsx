@@ -1,3 +1,5 @@
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 import { BookOpen, Clock, ArrowRight, CheckCircle, LogOut } from "lucide-react";
 
 const courses = [
@@ -12,7 +14,14 @@ const courses = [
 const daysLeft     = 22;
 const trialPercent = Math.round(((30 - daysLeft) / 30) * 100);
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const user = await currentUser();
+  if (!user) redirect("/sign-in");
+
+  const firstName = user.firstName ?? "there";
+  const email = user.emailAddresses[0]?.emailAddress ?? "";
+  const initials = `${user.firstName?.[0] ?? ""}${user.lastName?.[0] ?? ""}`.toUpperCase() || "U";
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Header */}
@@ -22,13 +31,13 @@ export default function DashboardPage() {
         </a>
         <div className="flex items-center gap-6">
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-sm font-medium">Jane Smith</span>
-            <span className="text-xs text-muted-foreground">jane@example.com</span>
+            <span className="text-sm font-medium">{user.fullName}</span>
+            <span className="text-xs text-muted-foreground">{email}</span>
           </div>
           <div className="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm font-medium" style={{ background: "linear-gradient(135deg, #a78bfa, #f472b6)" }}>
-            JS
+            {initials}
           </div>
-          <a href="/" className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <a href="/sign-out" className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <LogOut className="w-4 h-4" />
             Sign Out
           </a>
@@ -42,7 +51,7 @@ export default function DashboardPage() {
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
               <p className="text-xs font-mono text-muted-foreground mb-1">Dashboard</p>
-              <h1 className="text-2xl lg:text-3xl font-display mb-1">Welcome back, Jane!</h1>
+              <h1 className="text-2xl lg:text-3xl font-display mb-1">Welcome back, {firstName}!</h1>
               <p className="text-muted-foreground text-sm">Your free trial is active — explore all demo papers below.</p>
             </div>
 

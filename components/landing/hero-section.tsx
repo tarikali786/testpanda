@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 const courses = [
   { name: "NAPLAN", year: "Year 3", color: "#a78bfa", price: 10 },
@@ -21,6 +22,7 @@ const stats = [
 
 export function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     setIsVisible(true);
@@ -105,11 +107,11 @@ export function HeroSection() {
               }`}
           >
             <a
-              href="#pricing"
+              href={isSignedIn ? "/dashboard" : "/sign-in"}
               className="inline-flex items-center gap-2 px-8 py-4 text-white rounded-full font-medium hover:opacity-90 transition-opacity"
               style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
             >
-              Start Free Trial — 30 Days Free
+              {isSignedIn ? "Dashboard" : "Start Free Trial — 30 Days Free"}
               <ArrowRight className="w-4 h-4" />
             </a>
             <a
