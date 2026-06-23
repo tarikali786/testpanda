@@ -14,6 +14,7 @@ const courses = [
     price:    10,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Foundation exam preparation for Year 3 NAPLAN.",
+    classroomUrl: "https://classroom.google.com/c/NzgyODk5MjMwMTY1?cjc=wy5aceqw",
   },
   {
     slug:     "oc-year-4",
@@ -23,6 +24,7 @@ const courses = [
     price:    15,
     subjects: ["Mathematical Reasoning", "Thinking Skills", "Reading"],
     desc:     "Opportunity Class placement test preparation.",
+    classroomUrl: "https://classroom.google.com/c/Nzg4NjM2ODcwNTQz?cjc=ks7n4i2c",
   },
   {
     slug:     "naplan-year-5",
@@ -32,6 +34,7 @@ const courses = [
     price:    20,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Comprehensive NAPLAN preparation for Year 5.",
+    classroomUrl: "https://classroom.google.com/c/NzgyODQ5Mjc3Njg0?cjc=2xnlj7ba",
   },
   {
     slug:     "selective-year-6",
@@ -41,6 +44,7 @@ const courses = [
     price:    25,
     subjects: ["Mathematical Reasoning", "Thinking Skills", "Reading", "Writing"],
     desc:     "Selective High School placement exam preparation.",
+    classroomUrl: "https://classroom.google.com/c/NzcwNDYxNTQ4MjEw?cjc=cphp4ivz",
   },
   {
     slug:     "naplan-year-7",
@@ -50,6 +54,7 @@ const courses = [
     price:    30,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Advanced NAPLAN preparation for Year 7.",
+    classroomUrl: "https://classroom.google.com/c/Nzg4NjM2NzEzMzA5?cjc=u6ff3z2t",
   },
   {
     slug:     "naplan-year-9",
@@ -59,6 +64,7 @@ const courses = [
     price:    35,
     subjects: ["Reading", "Writing", "Language Conventions", "Numeracy"],
     desc:     "Senior NAPLAN preparation for Year 9 students.",
+    classroomUrl: "https://classroom.google.com/c/Nzg5NjU0NTcxNTc4?cjc=jacj3tz5",
   },
 ];
 
@@ -199,11 +205,13 @@ export function CoursesSection() {
               {/* CTA */}
               <div className="mt-auto flex items-center justify-between">
                 <a
-                  href="#pricing"
+                  href={course.classroomUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm font-medium transition-all group-hover:gap-3"
                   style={{ color: course.color }}
                 >
-                  View Plans
+                  Go To Classroom
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </a>
                 <button

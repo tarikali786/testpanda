@@ -35,14 +35,12 @@ export function Navigation() {
           }`}
       >
         <div
-          className={`flex items-center justify-between transition-all duration-500 px-6 lg:px-8 ${isScrolled ? "h-20" : "h-22"
-            }`}
+          className={`flex items-center justify-between transition-all duration-500 px-6 lg:px-8 h-16`}
         >
           {/* Logo */}
           <a href="/" className="flex items-center gap-2">
 
-            <img src="/logo.png" alt="TestPanda" className={` ${isScrolled ? "h-18" : "h-22"}
-              w-auto `} />
+            <img src="/logo.png" alt="TestPanda" className={`h-auto w-40 `} />
           </a>
 
           {/* Desktop Nav */}
@@ -67,7 +65,7 @@ export function Navigation() {
                 <a href="/dashboard" className="text-sm text-foreground/70 hover:text-foreground transition-colors">
                   Dashboard
                 </a>
-                <UserButton afterSignOutUrl="/" />
+                <UserButton />
               </>
             ) : (
               <>
@@ -78,7 +76,7 @@ export function Navigation() {
                   size="sm"
                   asChild
                   className={`rounded-full transition-all duration-500 text-white ${isScrolled ? "px-4 h-8 text-xs" : "px-6"}`}
-                  style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+                  style={{ background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)" }}
                 >
                   <a href="#pricing">Get Started</a>
                 </Button>
@@ -125,7 +123,7 @@ export function Navigation() {
             {isSignedIn ? (
               <Button
                 className="flex-1 rounded-full h-14 text-base text-white"
-                style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+                style={{ background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)" }}
                 asChild
                 onClick={() => setIsMobileMenuOpen(false)}
               >
@@ -142,7 +140,7 @@ export function Navigation() {
                 </Button>
                 <Button
                   className="flex-1 rounded-full h-14 text-base text-white"
-                  style={{background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)"}}
+                  style={{ background: "linear-gradient(135deg, #a78bfa 0%, #eca8d6 50%, #f472b6 100%)" }}
                   asChild
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

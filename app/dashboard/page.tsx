@@ -49,7 +49,7 @@ export default async function DashboardPage() {
       {/* Header */}
       <header className="sticky top-0 bg-background/95 backdrop-blur-xl z-50 border-b border-foreground/10 px-6 lg:px-12 h-20 flex items-center justify-between">
         <a href="/">
-          <img src="/logo.png" alt="TestPanda" className="h-16 w-auto" />
+          <img src="/logo.png" alt="TestPanda" className="h-auto w-40" />
         </a>
         <div className="flex items-center gap-6">
           <div className="hidden sm:flex flex-col items-end">

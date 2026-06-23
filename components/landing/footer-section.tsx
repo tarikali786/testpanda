@@ -44,7 +44,7 @@ export function FooterSection() {
             <div className="col-span-2">
               <a href="#" className="inline-flex items-center gap-2 mb-6">
                 <img src="/logo.png" alt="TestPanda" className={`  h-auto
-              w-auto `} />
+              w-50 `} />
               </a>
 
               <p className="text-muted-foreground leading-relaxed mb-8 max-w-xs text-sm">
