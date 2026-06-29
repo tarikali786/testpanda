@@ -38,7 +38,7 @@ export default async function DashboardPage() {
 
   // Fetch purchased courses
   const subscriptions = await getUserSubscriptions(supabase, user.id);
-  const purchasedSlugs = subscriptions.map((s) => s.course_id);
+  const purchasedSlugs = [...new Set(subscriptions.map((s) => s.course_id))];
 
   return (
     <div className="min-h-screen bg-background text-foreground">

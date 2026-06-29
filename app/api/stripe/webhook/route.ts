@@ -27,14 +27,14 @@ export async function POST(req: NextRequest) {
       validUntil.setFullYear(validUntil.getFullYear() + 1);
       const amount = (session.amount_total ?? 0) / 100;
 
-      // Save subscription to Supabase
-      await supabase.from("subscriptions").insert({
+      // Save subscription to Supabase (upsert to prevent duplicates)
+      await supabase.from("subscriptions").upsert({
         user_id: clerk_user_id,
         course_id: courseId,
         stripe_session_id: session.id,
         amount,
         valid_until: validUntil.toISOString(),
-      });
+      }, { onConflict: "user_id,course_id" });
 
       // Get user details from Supabase
       const { data: user } = await supabase

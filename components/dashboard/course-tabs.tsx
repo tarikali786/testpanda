@@ -203,7 +203,7 @@ function BrowseCard({ course }: { course: Course }) {
       </div>
       <div className="mt-auto">
         <a
-          href="/#pricing"
+          href="/#courses"
           className="inline-flex items-center gap-2 text-sm font-medium text-white px-4 py-2 rounded-sm hover:opacity-90 transition-opacity"
           style={{ backgroundColor: course.color }}
         >
